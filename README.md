@@ -1,6 +1,7 @@
-# DSSG Solve: International Water Management Institute
+# Amphan: Analyzing Experiences of Extreme Weather Events using Online Data
 
-## Project Team: Ancil Crayton, João Fonseca, Jared Ross, Marcelo Sandoval-Castañeda
+## DSSG Solve Team: Ancil Crayton, João Fonseca, Jared Ross, Marcelo Sandoval-Castañeda
+## Project Partner: International Water Management Institute (IWMI)
 
 ### Background 
 
