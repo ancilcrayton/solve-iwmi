@@ -1,6 +1,6 @@
 # DSSG Solve: International Water Management Institute
 
-## Project Team: Ancil Crayton, Jared Ross, João Fonseca, Marcelo Sandoval-Castañeda
+## Project Team: Ancil Crayton, João Fonseca, Jared Ross, Marcelo Sandoval-Castañeda
 
 ### Background 
 
