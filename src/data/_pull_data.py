@@ -65,5 +65,5 @@ def pull_tweets(
             json.dump(tweet, f)
             f.write('\n')
 
-    logger.info(f'Data successfuly saved at \"{os.path.join(save_path, fname)}\"')
+    logger.info(f'Data successfuly saved at \"{os.path.join(save_path, file_name)}\"')
 
