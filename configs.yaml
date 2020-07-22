@@ -1,0 +1,18 @@
+
+general_configs:
+    verbose: &verbose True
+    raw_data: &raw_data data/raw/
+    interim_data: &interim_data data/interim/
+    processed_data: &processed_data data/processed/
+    external_data: &external_data data/external/
+
+twitter_data_pull:
+    credentials_path: twitter_creds.yaml
+    credentials_key: search_tweets_api
+    save_path: *raw_data
+    results_per_call: 500
+    max_results: 3000
+    from_date: "2020-05-14"
+    to_date: "2020-06-15"
+    query: "(cyclone amphan)"
+    verbose: *verbose
