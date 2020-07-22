@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+    notebooks:
+        build: 
+            context: ./
+            dockerfile: Dockerfile
+        restart: always
+        volumes:
+            #use this for mac or linux
+            - ./:/home/jovyan/work
+            #this is for Jareds windows wonkiness
+            - /c/Users/jared/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/jared/personal/solve-iwmi:/home/jovyan/work
+
+        ports:
+            - '8888:8888'
+        networks:
+            - iwmi-net
+    elasticsearch:
+        image: elasticsearch:7.3.0
+        ports:
+            - "9200:9200"
+            - "9300:9300"
+        networks: 
+            - iwmi-net
+        restart: on-failure
+        environment: 
+            discovery.type: single-node
+    kibana:
+        image: kibana:7.3.0
+        ports: 
+            - "5601:5601"
+        networks:
+            - iwmi-net
+        links: 
+            - elasticsearch:elasticsearch
+networks: 
+    iwmi-net:
+        external: true
