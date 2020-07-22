@@ -8,9 +8,9 @@ services:
         restart: always
         volumes:
             #use this for mac or linux
-            # - ./:/home/jovyan/work
+            - ./:/home/jovyan/work
             #this is for Jareds windows wonkiness
-            - /c/Users/jared/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/jared/personal/solve-iwmi:/home/jovyan/work
+            # - /c/Users/jared/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/jared/personal/solve-iwmi:/home/jovyan/work
 
         ports:
             - '8888:8888'
