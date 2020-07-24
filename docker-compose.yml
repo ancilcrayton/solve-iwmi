@@ -8,16 +8,16 @@ services:
         restart: always
         volumes:
             #use this for mac or linux
-            - ./:/home/jovyan/work
+            # - ./:/home/jovyan/work
             #this is for Jareds windows wonkiness
-            # - /c/Users/jared/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/jared/personal/solve-iwmi:/home/jovyan/work
+            - /c/Users/jared/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/jared/personal/solve-iwmi:/home/jovyan/work
 
         ports:
             - '8888:8888'
         networks:
             - iwmi-net
     elasticsearch:
-        image: elasticsearch:7.3.0
+        image: elasticsearch:7.8.0
         ports:
             - "9200:9200"
             - "9300:9300"
@@ -27,7 +27,7 @@ services:
         environment: 
             discovery.type: single-node
     kibana:
-        image: kibana:7.3.0
+        image: kibana:7.8.0
         ports: 
             - "5601:5601"
         networks:
