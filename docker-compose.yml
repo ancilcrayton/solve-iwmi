@@ -1,21 +1,21 @@
 version: '3'
 
 services:
-    notebooks:
-        build: 
-            context: ./
-            dockerfile: Dockerfile
-        restart: always
-        volumes:
-            #use this for mac or linux
-            # - ./:/home/jovyan/work
-            #this is for Jareds windows wonkiness
-            - /c/Users/jared/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/jared/personal/solve-iwmi:/home/jovyan/work
+    # notebooks:
+    #     build: 
+    #         context: ./
+    #         dockerfile: Dockerfile
+    #     restart: always
+    #     volumes:
+    #         #use this for mac or linux
+    #         # - ./:/home/jovyan/work
+    #         #this is for Jareds windows wonkiness
+    #         - /c/Users/jared/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/jared/personal/solve-iwmi:/home/jovyan/work
 
-        ports:
-            - '8888:8888'
-        networks:
-            - iwmi-net
+    #     ports:
+    #         - '8888:8888'
+    #     networks:
+    #         - iwmi-net
     elasticsearch:
         image: elasticsearch:7.8.0
         ports:
