@@ -44,7 +44,7 @@ def main(configs_path, configs_key):
     del configs['credentials_key']
 
     logger = logging.getLogger(__name__)
-    logger.propagate = False
+    logger.propagate = configs['verbose']
     logger.info('Initializing - Pulling raw data from Twitter (via API)')
 
     if logger.propagate:
