@@ -11,11 +11,11 @@ twitter_data_pull:
     credentials_key: search_tweets_api
     save_path: *raw_data
     results_per_call: 500
-    max_results: 3000
+    max_results: 700000
     file_name: complete_data_pull.json
     from_date: "2020-05-01"
     to_date: "2020-06-15"
-    query: ((cyclone OR cyclonic OR cyclonical OR hurricane OR storm) (Amphan OR Ampan)) OR ((महाचक्रवात OR चक्रवात OR तूफान) (अम्फान)) OR ঘূর্ণিঝড় OR হ্যারিকেন OR আম্পান OR আমপান OR অ্যাম্ফান OR ସାଇକ୍ଲୋନ୍ OR ମହାବାତ୍ୟାର OR ଆମ୍ଫାନ୍ -nisarga -(ARB 01) -নিসর্গ -ब्रह्मांड -ବ୍ରହ୍ମାଣ୍ଡ
+    query: Amphan OR Ampan OR अम्फान OR ঘূর্ণিঝড় OR হ্যারিকেন OR আম্পান OR আমপান OR অ্যাম্ফান OR ସାଇକ୍ଲୋନ୍ OR ମହାବାତ୍ୟାର OR ଆମ୍ଫାନ୍ -nisarga -(ARB 01) -নিসর্গ -ब्रह्मांड -ବ୍ରହ୍ମାଣ୍ଡ
     count_bucket: "day"
     verbose: *verbose
 
