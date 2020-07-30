@@ -13,9 +13,9 @@ import json
 from searchtweets import (
     load_credentials,
     gen_rule_payload,
-    ResultStream,
     collect_results
 )
+from ._modded_result_stream import ResultStream
 import os
 
 log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'

@@ -18,7 +18,7 @@ import logging
 from pathlib import Path
 import yaml
 from os.path import join
-from ._pull_data import pull_tweets, count_tweets
+from src.data import pull_tweets, count_tweets
 
 
 @click.command()
