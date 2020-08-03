@@ -5,7 +5,6 @@ dataframe.
 
 import numpy as np
 import pandas as pd
-from sqlite3 import connect
 import logging
 
 log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -53,7 +52,7 @@ def merge_dataframes(
     return df_merged
 
 
-def transform(json_path, db_path=None):
+def transform(json_path):
     """
     Converts a raw .json file containing Tweets' data into a clean(er)
     dataset.
@@ -69,9 +68,6 @@ def transform(json_path, db_path=None):
 
     df_users = pd.DataFrame(df['user'].tolist())
 
-    # I am deleting "entities" and "extended_entities" because I was unsure
-    # of its advantage. Maybe it can be properly preprocessed, or at maybe
-    # we can just take the useful bits out of it.
     df_tweets = df.drop(columns=[
         'id', 'in_reply_to_status_id', 'in_reply_to_user_id', 'user',
         'coordinates', 'place', 'quoted_status_id', 'favorited',
@@ -79,16 +75,20 @@ def transform(json_path, db_path=None):
         'filter_level', 'display_text_range', 'contributors',
         'quoted_status', 'quoted_status_id', 'quoted_status_permalink',
         'in_reply_to_screen_name', 'text', 'extended_tweet', 'truncated',
-        'entities', 'extended_entities'
     ])
     df_tweets['user_id_str'] = df['user'].apply(lambda x: x['id_str'])
-    df_tweets['full_text'] = df.apply(
-        lambda row:
-            row['text']
-            if not row['truncated']
-            else row['extended_tweet']['full_text'],
-        axis=1
-    )
+
+    def get_full_text(row):
+        if (not row['truncated']) and type(row['retweeted_status']) != dict:
+            return row['text']
+        elif type(row['retweeted_status']) != dict:
+            return row['extended_tweet']['full_text']
+        elif row['retweeted_status']['truncated']:
+            return row['retweeted_status']['extended_tweet']['full_text']
+        else:
+            return row['retweeted_status']['text']
+
+    df_tweets['full_text'] = df.apply(get_full_text, axis=1)
 
     def get_retweet_id(row):
         """returns: is_retweet, original_tweet_id_str"""
@@ -117,27 +117,25 @@ def transform(json_path, db_path=None):
         'profile_background_color', 'profile_sidebar_border_color'
     ]+all_missing).drop_duplicates(subset='id_str', keep='first')
 
-    df_users['derived__location'] = df_users['derived']\
-        .apply(
-            lambda x: x['locations'][0]['country']
-            if type(x) == dict
-            else x
-        )
-
-    df_users['derived'] = df_users['derived'].apply(
-        lambda x: str(x) if type(x) == dict else x
+    df_derived = pd.DataFrame(
+        df_users.derived.apply(
+            lambda x: x['locations'][0] if type(x) == dict else {}
+        ).tolist()
     )
+    df_geo = pd.DataFrame(
+        df_derived.geo.apply(
+            lambda x: x if type(x) == dict else {}
+        ).tolist()
+    )
+    df_derived = pd.concat([df_derived, df_geo], axis=1).drop(columns='geo')
 
-    if db_path is not None:
-        with connect(db_path) as connection:
-            df_users.to_sql(
-                'users', connection, index=False, if_exists='replace'
-            )
-            df_tweets.to_sql(
-                'tweets', connection, index=False, if_exists='replace'
-            )
+    df_users = pd.concat(
+        [df_users, df_derived.rename(
+            columns={i: f'users_derived_{i}' for i in df_derived.columns})],
+        axis=1
+    ).drop(columns='derived')
 
     return merge_dataframes(
         df_users,
         df_tweets
-    )
+    ).drop_duplicates(subset='tweet_id')
