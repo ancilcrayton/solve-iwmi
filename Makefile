@@ -33,6 +33,22 @@ data_pull: requirements
 data: requirements
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw data/processed
 
+## Create Docker Network 
+create_docker_network:
+	docker network create iwmi-net
+
+## Create and/or Open local Elastic Search Server
+database:
+	make -i create_docker_network
+	docker-compose up -d
+	@echo ">>> Kibana is running at http://localhost:5601"
+
+## Close local Elastic Search Server
+close_database:
+	docker kill solve-iwmi_kibana_1 solve-iwmi_elasticsearch_1
+
+
+
 ## Delete all compiled Python files
 clean:
 	find . -type f -name "*.py[co]" -delete
@@ -41,22 +57,6 @@ clean:
 ## Lint using flake8
 lint:
 	flake8 src
-
-## Upload Data to S3
-sync_data_to_s3:
-ifeq (default,$(PROFILE))
-	aws s3 sync data/ s3://$(BUCKET)/data/
-else
-	aws s3 sync data/ s3://$(BUCKET)/data/ --profile $(PROFILE)
-endif
-
-## Download Data from S3
-sync_data_from_s3:
-ifeq (default,$(PROFILE))
-	aws s3 sync s3://$(BUCKET)/data/ data/
-else
-	aws s3 sync s3://$(BUCKET)/data/ data/ --profile $(PROFILE)
-endif
 
 ## Set up python interpreter environment
 create_environment:
