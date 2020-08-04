@@ -29,17 +29,17 @@ requirements: test_environment
 data_pull: requirements
 	$(PYTHON_INTERPRETER) src/data/make_data_pull.py configs.yaml twitter_data_pull
 
-## Make Dataset
-data: requirements
-	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw data/processed
+## Transform and Load data
+etl: 
+	$(PYTHON_INTERPRETER) src/data/make_etl.py configs.yaml data_etl 
 
 ## Create Docker Network 
-create_docker_network:
+create_network:
 	docker network create iwmi-net
 
 ## Create and/or Open local Elastic Search Server
 database:
-	make -i create_docker_network
+	make -i create_network
 	docker-compose up -d
 	@echo ">>> Kibana is running at http://localhost:5601"
 

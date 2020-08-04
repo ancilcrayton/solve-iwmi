@@ -30,3 +30,8 @@ test_data_pull:
     query: ((cyclone OR cyclonic OR cyclonical OR hurricane OR storm) (Amphan OR Ampan))
     count_bucket: "day"
     verbose: *verbose
+
+data_etl:
+    input_path: data/raw/data_pull_sample.json
+    ip_address: localhost
+    verbose: True

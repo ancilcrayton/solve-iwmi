@@ -59,6 +59,46 @@ Project Organization
     │
     └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
 
+Installation and Setup
+--------
+A Python distribution of version 3.7 or higher is required to run this project. 
+
+### Basic Installation
+All `make` scripts/commands can be configured through the `configs.yaml` file. The following commands should allow you to setup this project with minimal effort:
+    
+    # Clone the project.
+    git clone https://github.com/ancilcrayton/solve-iwmi.git
+    cd solve-iwmi
+    
+    # Create and activate an environment 
+    make create_environment 
+    conda activate solve-iwmi # Adapt this line below if you're not running conda
+    
+    # Install project requirements
+    make requirements
+    
+    # Read the corresponding subchapter to pull data from Twitter
+    # make data_pull
+
+    # Set up Elastic Search database (it might take a while to initialize...)
+    make database
+
+    # Extract, Transform and Load data
+    make etl
+
+    # Close the database
+    make close_database
+
+### Pulling Twitter Data
+If you intend to pull your own twitter data you must create your own yaml file with Premium twitter API credentials by running `touch twitter_creds.yaml`. It should contain the following structure:
+
+    search_tweets_api:
+        account_type: <premium OR enterprise>
+        consumer_key: <YOUR_API_KEY> 
+        consumer_secret: <YOUR_API_SECRET>
+        endpoint: https://api.twitter.com/1.1/tweets/search/fullarchive/<YOUR_DEV_ENV_LABEL>.json
+
+
 
 --------
 

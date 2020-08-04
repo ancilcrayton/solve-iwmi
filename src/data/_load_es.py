@@ -14,8 +14,6 @@ from elasticsearch import Elasticsearch, helpers
 log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logging.basicConfig(level=logging.INFO, format=log_fmt)
 
-es = Elasticsearch(['localhost'])  # no args, connect to localhost:9200
-
 
 def doc_generator(
     df,
@@ -45,6 +43,7 @@ def doc_generator(
 
 def load_es(
     df_merged,
+    ip_address='localhost',
     verbose=False
 ):
     """
@@ -57,13 +56,16 @@ def load_es(
         A tuple with summary information - number of successfully executed
         actions and list of errors
     """
+
+    es = Elasticsearch([ip_address])  # no args, connect to localhost:9200
+
     def filterKeys(document):
         # just return all the data from each row
         return document.to_dict()
 
     logger = logging.getLogger(__name__)
     logger.propagate = verbose
-    logger.info('Loading data into es')
+    logger.info('Loading data into Elastic Search')
 
     actions, errors = helpers.bulk(
         client=es,
