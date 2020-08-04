@@ -13,3 +13,8 @@ elasticsearch
 pandas
 matplotlib
 seaborn
+googletrans==3.0.0
+preprocessing
+nltk
+pyspellchecker 
+tweet-preprocessor
