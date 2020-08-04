@@ -59,7 +59,7 @@ Project Organization
     │
     └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
 
-Instalation and Setup
+Installation and Setup
 --------
 A Python distribution of version 3.7 or higher is required to run this project. 
 
