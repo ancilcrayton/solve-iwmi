@@ -11,10 +11,10 @@ twitter_data_pull:
     credentials_key: search_tweets_api
     save_path: *raw_data
     results_per_call: 500
-    max_results: 700000
-    file_name: complete_data_pull.json
+    max_results: 450000
+    file_name: full_data_pull.json
     from_date: "2020-05-01"
-    to_date: "2020-06-15"
+    to_date: "2020-06-07"
     query: Amphan OR Ampan OR अम्फान OR ঘূর্ণিঝড় OR হ্যারিকেন OR আম্পান OR আমপান OR অ্যাম্ফান OR ସାଇକ୍ଲୋନ୍ OR ମହାବାତ୍ୟାର OR ଆମ୍ଫାନ୍ -nisarga -(ARB 01) -নিসর্গ -ब्रह्मांड -ବ୍ରହ୍ମାଣ୍ଡ
     count_bucket: "day"
     verbose: *verbose
@@ -34,4 +34,4 @@ test_data_pull:
 data_etl:
     input_path: data/raw/data_pull_sample.json
     ip_address: localhost
-    verbose: True
+    verbose: *verbose
