@@ -16,5 +16,6 @@ seaborn
 googletrans==3.0.0
 preprocessing
 nltk
-pyspellchecker 
+pyspellchecker
 tweet-preprocessor
+rich
