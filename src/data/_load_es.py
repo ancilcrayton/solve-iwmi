@@ -67,10 +67,17 @@ def load_es(
     logger.propagate = verbose
     logger.info('Loading data into Elastic Search')
 
+    if not verbose:
+        logging.disable(logging.CRITICAL)
+
     actions, errors = helpers.bulk(
         client=es,
         index='twitter',
-        actions=doc_generator(df_merged, 'tweet_id', filterKeys)
+        actions=doc_generator(df_merged, 'tweet_id', filterKeys),
+        stats_only=(not verbose)
     )
+
+    if not verbose:
+        logging.disable(logging.NOTSET)
 
     return actions, errors
