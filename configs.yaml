@@ -32,6 +32,6 @@ test_data_pull:
     verbose: *verbose
 
 data_etl:
-    input_path: data/raw/data_pull_sample.json
+    input_path: data/raw/chunked_data/
     ip_address: localhost
     verbose: *verbose

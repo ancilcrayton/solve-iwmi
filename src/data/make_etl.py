@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
+from os.path import join
 import click
 import logging
 from pathlib import Path
 import yaml
 from src.data import transform, load_es
+from rich.progress import track
 
 
 @click.command()
@@ -21,11 +23,26 @@ def main(configs_path, configs_key):
     logger = logging.getLogger(__name__)
     logger.info('Transforming and Loading data set from raw data')
 
-    load_es(
-        transform(configs['input_path']),
-        ip_address=configs['ip_address'],
-        verbose=configs['verbose']
-    )
+    if os.path.isdir(configs['input_path']):
+        logger.info(
+            '`input_path` is a directory. ' +
+            'Reading all files in it'
+        )
+        for file in track(
+                os.listdir(configs['input_path']),
+                description='JSON ETL'
+                ):
+            load_es(
+                transform(join(configs['input_path'], file)),
+                ip_address=configs['ip_address'],
+                verbose=False
+            )
+    else:
+        load_es(
+            transform(configs['input_path']),
+            ip_address=configs['ip_address'],
+            verbose=configs['verbose']
+        )
 
     msg = 'Successfully transformed and loaded data into Elastic '\
         + 'Search database'
