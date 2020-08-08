@@ -98,6 +98,12 @@ If you intend to pull your own twitter data you must create your own yaml file w
         consumer_secret: <YOUR_API_SECRET>
         endpoint: https://api.twitter.com/1.1/tweets/search/fullarchive/<YOUR_DEV_ENV_LABEL>.json
 
+### Data ETL
+If you raw data file is too large to be loaded at once into Elastic Search, you can split it into smaller chunks:
+    
+    jq -c . < full_data_pull.json | split -l 10000  --additional-suffix=.json - chunk_
+
+
 
 
 --------
