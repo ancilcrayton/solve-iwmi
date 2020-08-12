@@ -19,3 +19,5 @@ nltk
 pyspellchecker
 tweet-preprocessor
 rich
+eland
+gensim
