@@ -5,7 +5,11 @@ import click
 import logging
 from pathlib import Path
 import yaml
-from src.data import transform, load_es
+from src.data import (
+    transform,
+    load_es,
+    preprocessDataFrame
+)
 from rich.progress import track
 
 
@@ -33,13 +37,17 @@ def main(configs_path, configs_key):
                 description='JSON ETL'
                 ):
             load_es(
-                transform(join(configs['input_path'], file)),
+                preprocessDataFrame(
+                    transform(join(configs['input_path'], file))
+                ),
                 ip_address=configs['ip_address'],
                 verbose=False
             )
     else:
         load_es(
-            transform(configs['input_path']),
+            preprocessDataFrame(
+                transform(configs['input_path'])
+            ),
             ip_address=configs['ip_address'],
             verbose=configs['verbose']
         )
