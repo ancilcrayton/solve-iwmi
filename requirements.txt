@@ -21,3 +21,4 @@ tweet-preprocessor
 rich
 eland
 gensim
+networkx
