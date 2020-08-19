@@ -13,18 +13,21 @@ class User2Vec(Doc2Vec):
             **kwargs
         )
 
-    def infer_vectors(self, users, doc_words, **kwargs):
-        """Docs within doc_words must be tokenized."""
+    def infer_user_vector(self, doc_words, **kwargs):
+
         srs_doc_words = pd.Series(doc_words)
 
         # Vectorize docs within doc_words
         doc_vectors = srs_doc_words.apply(
             lambda doc: np.expand_dims(
-                self.infer_vector(tokenize(doc)), axis=0
-            )
+                self.infer_vector(tokenize(doc), **kwargs), axis=0
         )
 
-        doc_vectors = np.concatenate(doc_vectors, 0)
+        return doc_vectors.mean(0)
+
+
+
+    def infer_user_vectors(self, users, doc_words, **kwargs):
 
         user_ids = np.array([])
         user_vectors = np.empty((0, self.vector_size))
@@ -32,7 +35,10 @@ class User2Vec(Doc2Vec):
             mask = users == user
             user_ids = np.append(user, user_ids)
             user_vectors = np.append(
-                np.expand_dims(doc_vectors[mask].mean(0), 0),
+                np.expand_dims(
+                    self.infer_user_vector(doc_vectors[mask], **kwargs),
+                    0
+                ),
                 user_vectors,
                 axis=0
             )
