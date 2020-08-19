@@ -71,6 +71,11 @@ def transform(json_path, verbose=False):
 
     df = pd.read_json(json_path, lines=True)
 
+    # add the original tweets that are missing in the dataset
+    new_tweets = df['retweeted_status'].dropna().tolist()\
+        + df['quoted_status'].dropna().tolist()
+    df = pd.concat([df, pd.DataFrame(new_tweets)]).drop_duplicates('id_str')
+
     df_users = pd.DataFrame(df['user'].tolist())
 
     logger.info('Dropping irrelevant columns')
@@ -124,6 +129,9 @@ def transform(json_path, verbose=False):
     df_tweets['is_retweet'], df_tweets['original_tweet_id_str'] = \
         zip(*df.apply(get_retweet_id, axis=1))
     df_tweets['is_reply'] = ~df['in_reply_to_status_id'].isna()
+    df_tweets['created_at'] = pd.to_datetime(
+        df_tweets['created_at'].reset_index(drop=True), utc=True
+    )
 
     logger.info('Extracting some basic info from users dataframe')
     df_derived = pd.DataFrame(
