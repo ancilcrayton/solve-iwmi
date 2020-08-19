@@ -24,3 +24,7 @@ eland
 gensim
 networkx
 sklearn
+pytorch
+tensorflow
+transformers
+tqdm
