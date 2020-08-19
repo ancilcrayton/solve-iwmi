@@ -34,4 +34,7 @@ test_data_pull:
 data_etl:
     input_path: data/raw/chunked_data/
     ip_address: localhost
+    load_es: False
+    # ignore save_path if load_es is True
+    save_path: *processed_data
     verbose: *verbose

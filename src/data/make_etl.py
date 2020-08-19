@@ -33,24 +33,34 @@ def main(configs_path, configs_key):
             'Reading all files in it'
         )
         for file in track(
-                os.listdir(configs['input_path']),
-                description='JSON ETL'
-                ):
-            load_es(
-                preprocessDataFrame(
-                    transform(join(configs['input_path'], file))
-                ),
-                ip_address=configs['ip_address'],
-                verbose=False
+            os.listdir(configs['input_path']),
+            description='JSON ETL'
+        ):
+
+            preprocessed = preprocessDataFrame(
+                transform(join(configs['input_path'], file))
             )
+            if configs['load_es']:
+                load_es(
+                    preprocessed,
+                    ip_address=configs['ip_address'],
+                    verbose=False
+                )
+            else:
+                preprocessed.to_json(join(configs['save_path'], file))
     else:
-        load_es(
-            preprocessDataFrame(
-                transform(configs['input_path'])
-            ),
-            ip_address=configs['ip_address'],
-            verbose=configs['verbose']
+        preprocessed = preprocessDataFrame(
+            transform(configs['input_path'])
         )
+        if configs['load_es']:
+            load_es(
+                preprocessed,
+                ip_address=configs['ip_address'],
+                verbose=configs['verbose']
+            )
+        else:
+            preprocessed.to_json(join(configs['save_path'], file))
+
 
     msg = 'Successfully transformed and loaded data into Elastic '\
         + 'Search database'
