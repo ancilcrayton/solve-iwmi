@@ -4,6 +4,7 @@ use
 """
 
 import nltk
+nltk.download('vader_lexicon')
 import string
 from googletrans import Translator
 from nltk.corpus import stopwords
