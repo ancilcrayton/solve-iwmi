@@ -33,6 +33,10 @@ data_pull: requirements
 etl: 
 	$(PYTHON_INTERPRETER) src/data/make_etl.py configs.yaml data_etl 
 
+## Load preprocessed data into an Elastic Search server
+load_es:
+	$(PYTHON_INTERPRETER) src/data/make_load_es.py configs.yaml load_es
+
 ## Create Docker Network 
 create_network:
 	docker network create iwmi-net
