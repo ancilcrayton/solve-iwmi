@@ -32,13 +32,13 @@ def main(configs_path, configs_key):
             '`input_path` is a directory. ' +
             'Reading all files in it'
         )
-        for file in track(
+        for file_ in track(
             os.listdir(configs['input_path']),
             description='JSON ETL'
         ):
 
             preprocessed = preprocessDataFrame(
-                transform(join(configs['input_path'], file))
+                transform(join(configs['input_path'], file_))
             )
             if configs['load_es']:
                 load_es(
@@ -47,7 +47,7 @@ def main(configs_path, configs_key):
                     verbose=False
                 )
             else:
-                preprocessed.to_json(join(configs['save_path'], file))
+                preprocessed.to_json(join(configs['save_path'], file_))
     else:
         preprocessed = preprocessDataFrame(
             transform(configs['input_path'])
@@ -59,11 +59,15 @@ def main(configs_path, configs_key):
                 verbose=configs['verbose']
             )
         else:
-            preprocessed.to_json(join(configs['save_path'], file))
+            preprocessed.to_json(
+                join(configs['save_path'], os.path.basename(configs['input_path']))
+            )
 
-
-    msg = 'Successfully transformed and loaded data into Elastic '\
-        + 'Search database'
+    if configs['load_es']:
+       msg = 'Successfully transformed and loaded data into Elastic '\
+            + 'Search database'
+    else:
+       msg = 'Successfully transformed data'
 
     logger.info(msg)
 
