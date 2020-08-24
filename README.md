@@ -83,8 +83,11 @@ All `make` scripts/commands can be configured through the `configs.yaml` file. T
     # Set up Elastic Search database (it might take a while to initialize...)
     make database
 
-    # Extract, Transform and Load data
+    # Extract, Transform and Load data (the last step can be to save data as JSON files instead)
     make etl
+
+    # Load preprocessed data into ES
+    make load_es
 
     # Close the database
     make close_database

@@ -5,6 +5,7 @@ general_configs:
     interim_data: &interim_data data/interim/
     processed_data: &processed_data data/processed/
     external_data: &external_data data/external/
+    elasticsearch_ip: &es_ip localhost
 
 twitter_data_pull:
     credentials_path: twitter_creds.yaml
@@ -33,8 +34,13 @@ test_data_pull:
 
 data_etl:
     input_path: data/raw/chunked_data/
-    ip_address: localhost
+    # ip_address: *es_ip
     load_es: False
-    # ignore save_path if load_es is True
+    # ignore save_path and uncomment ip_address if load_es is True
     save_path: *processed_data
+    verbose: *verbose
+
+load_es:
+    input_path: *processed_data 
+    ip_address: *es_ip
     verbose: *verbose
