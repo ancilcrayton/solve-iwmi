@@ -37,7 +37,9 @@ def main(configs_path, configs_key):
             files,
             description='LOAD ES'
         ):
-            df = pd.read_json(join(configs['input_path'], file_), convert_dates=False)
+            df = pd.read_json(
+                join(configs['input_path'], file_), convert_dates=False
+            )
             df = df.where(df.notnull(), None)
             load_es(
                 df,
@@ -48,11 +50,10 @@ def main(configs_path, configs_key):
         df = pd.read_json(configs['input_path'])
         df = df.where(df.notnull(), None)
         load_es(
-            preprocessed,
+            df,
             ip_address=configs['ip_address'],
             verbose=configs['verbose']
         )
-
 
     msg = 'Successfully loaded data into Elastic '\
         + 'Search database'
