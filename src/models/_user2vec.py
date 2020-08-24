@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from gensim.models.doc2vec import Doc2Vec
+from ._utils import tokenize
 
 
 class User2Vec(Doc2Vec):
@@ -21,11 +22,10 @@ class User2Vec(Doc2Vec):
         doc_vectors = srs_doc_words.apply(
             lambda doc: np.expand_dims(
                 self.infer_vector(tokenize(doc), **kwargs), axis=0
+            )
         )
 
         return doc_vectors.mean(0)
-
-
 
     def infer_user_vectors(self, users, doc_words, **kwargs):
 
@@ -36,7 +36,7 @@ class User2Vec(Doc2Vec):
             user_ids = np.append(user, user_ids)
             user_vectors = np.append(
                 np.expand_dims(
-                    self.infer_user_vector(doc_vectors[mask], **kwargs),
+                    self.infer_user_vector(doc_words[mask], **kwargs),
                     0
                 ),
                 user_vectors,
@@ -44,4 +44,3 @@ class User2Vec(Doc2Vec):
             )
 
         return user_ids, user_vectors
-

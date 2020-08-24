@@ -60,14 +60,17 @@ def main(configs_path, configs_key):
             )
         else:
             preprocessed.to_json(
-                join(configs['save_path'], os.path.basename(configs['input_path']))
+                join(
+                    configs['save_path'],
+                    os.path.basename(configs['input_path'])
+                )
             )
 
     if configs['load_es']:
-       msg = 'Successfully transformed and loaded data into Elastic '\
+        msg = 'Successfully transformed and loaded data into Elastic '\
             + 'Search database'
     else:
-       msg = 'Successfully transformed data'
+        msg = 'Successfully transformed data'
 
     logger.info(msg)
 

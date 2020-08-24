@@ -66,14 +66,16 @@ def pull_tweets(
     )
 
     if file_name is None:
-        file_name = f'SAMPLE_DATA_QUERY_{query}_FROMDATE_{from_date}_TODATE_{to_date}.json'
+        file_name = f'SAMPLE_DATA_QUERY_{query}_'\
+                  + f'FROMDATE_{from_date}_TODATE_{to_date}.json'
 
     with open(os.path.join(save_path, file_name), 'a', encoding='utf-8') as f:
         for tweet in rs.stream():
             json.dump(tweet, f)
             f.write('\n')
 
-    logger.info(f'Data successfuly saved at \"{os.path.join(save_path, file_name)}\"')
+    logger.info('Data successfuly saved at'
+                + f'\"{os.path.join(save_path, file_name)}\"')
 
 
 def count_tweets(
