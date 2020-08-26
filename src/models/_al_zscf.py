@@ -118,14 +118,16 @@ class ALZeroShotWrapper(ClassifierMixin, BaseEstimator):
 
             # Assign ground truth labels based on zero-shot classification
             self.y[ids] = [
-                self.zscf(sequences[i], candidate_labels)['labels'][0]
+                self.label_encoder.transform(
+                    self.zscf(sequences[i], candidate_labels)['labels'][0]
+                )
                 for i in ids
             ]
 
             # train classifier and get probabilities
             classifier.fit(
                 X[selection],
-                self.label_encoder.transform(self.y[selection])
+                self.y[selection]
             )
 
             # save classifier
