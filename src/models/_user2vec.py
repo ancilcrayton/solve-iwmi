@@ -6,7 +6,7 @@ from rich.progress import track
 
 
 class User2Vec(Doc2Vec):
-    """TODO"""
+    """TODO: documentation"""
     def __init__(self, vector_size, min_count, epochs, **kwargs):
 
         super().__init__(
