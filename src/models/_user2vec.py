@@ -2,7 +2,10 @@ import numpy as np
 import pandas as pd
 from gensim.models.doc2vec import Doc2Vec
 from ._utils import tokenize
-from rich.progress import track
+from tqdm import tqdm
+
+
+tqdm.pandas()
 
 
 class User2Vec(Doc2Vec):
@@ -27,28 +30,18 @@ class User2Vec(Doc2Vec):
 
         return doc_vectors.mean(0)
 
-    def infer_user_vectors(
-        self, users, doc_words, track_progress=False, **kwargs
-    ):
+    def infer_user_vectors(self, users, doc_words):
 
-        users_iter = track(
-            np.unique(users),
-            description='Inferring User Vectors',
-            refresh_per_second=2
-        ) if track_progress else np.unique(users)
+        tweet_vectors = pd.Series(doc_words).progress_apply(
+            lambda doc: self.infer_vector(tokenize(doc))
+        ).tolist()
 
-        user_ids = np.array([])
-        user_vectors = np.empty((0, self.vector_size))
-        for user in users_iter:
-            mask = users == user
-            user_ids = np.append(user, user_ids)
-            user_vectors = np.append(
-                np.expand_dims(
-                    self.infer_user_vector(doc_words[mask], **kwargs),
-                    0
-                ),
-                user_vectors,
-                axis=0
-            )
+        df_vectors = pd.DataFrame(tweet_vectors)\
+            .join(
+                pd.Series(users, name='users').reset_index(drop=True)
+            ).groupby('users').mean()
+
+        user_ids = df_vectors.index.values
+        user_vectors = df_vectors.values
 
         return user_ids, user_vectors

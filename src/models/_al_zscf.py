@@ -7,6 +7,10 @@ from sklearn.base import ClassifierMixin, BaseEstimator, clone
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import LabelEncoder
 from transformers import pipeline
+import logging
+
+log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+logging.basicConfig(level=logging.INFO, format=log_fmt)
 
 
 def _entropy_selection(probabs, leftover_ids, increment):
@@ -60,7 +64,8 @@ class ALZeroShotWrapper(ClassifierMixin, BaseEstimator):
         save_classifiers=False,
         auto_load=True,
         evaluation_metric=None,
-        random_state=None
+        random_state=None,
+        verbose=None
     ):
         self.classifier = classifier
         self.max_iter = max_iter
@@ -75,7 +80,12 @@ class ALZeroShotWrapper(ClassifierMixin, BaseEstimator):
         self.save_classifiers = save_classifiers
         self.evaluation_metric = evaluation_metric
 
+        self._logger = logging.getLogger(__name__)
+        self._logger.propagate = verbose
+
     def fit(self, X, sequences, candidate_labels):
+
+        self._logger.info('Started fitting process. Setting up models.')
 
         if self.evaluation_metric is None:
             self.evaluation_metric_ = accuracy_score
@@ -97,7 +107,9 @@ class ALZeroShotWrapper(ClassifierMixin, BaseEstimator):
         self.label_encoder = LabelEncoder().fit(candidate_labels)
 
         while iter_n < self.max_iter:
-            print(f'iter {iter_n}') # it's here for debugging purposes
+
+            self._logger.info(f'Iteration #{iter_n}')
+
             classifier = clone(self.classifier)
 
             # add new samples to dataset
