@@ -8,6 +8,8 @@ searchtweets
 coverage
 awscli
 flake8
+flask
+flask-cors
 python-dotenv>=0.5.1
 elasticsearch
 pandas

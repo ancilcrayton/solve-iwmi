@@ -4,18 +4,36 @@ services:
     # notebooks:
     #     build: 
     #         context: ./
-    #         dockerfile: Dockerfile
+    #         dockerfile: ./notebookDocker/Dockerfile
     #     restart: always
     #     volumes:
     #         #use this for mac or linux
     #         # - ./:/home/jovyan/work
-    #         #this is for Jareds windows wonkiness
-    #         - /c/Users/jared/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/jared/personal/solve-iwmi:/home/jovyan/work
-
     #     ports:
     #         - '8888:8888'
     #     networks:
     #         - iwmi-net
+    api:
+        image: python:3.7
+        build: 
+            context: ./
+            dockerfile: ./apiDocker/Dockerfile
+        volumes:
+          - ./api:/app
+          - ./src:/app/src
+        ports:
+          - "8080:8080"
+        networks:
+          - iwmi-net
+    web:
+        image: node
+        volumes:
+          - ./web:/app
+        command: bash -c "cd /app && npm i -g npm && npm i -g nodemon react-scripts && npm start"
+        ports:
+          - "3000:3000"
+        networks:
+          - iwmi-net
     elasticsearch:
         image: elasticsearch:7.8.0
         volumes:
