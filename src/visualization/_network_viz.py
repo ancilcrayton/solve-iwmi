@@ -1,6 +1,8 @@
 
 import json
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
+from matplotlib import cm, colors
 
 import dash
 from dash.dependencies import Input, Output, State
@@ -20,11 +22,17 @@ server = app.server
 # Hyper params
 edges_path = 'data/results/edges_users.csv'
 nodes_path = 'data/results/nodes_users.csv'
+sample_n_edges = 1000
 dist_feature = 'weighted_dist'
+node_size = 20
+scale_multiplier = 20
+weight_multiplier = 10
+tweet_count_clip_value = 10
+followers_clip_value = 50000
 
 # ###################### DATA PREPROCESSING ######################
 # Load data
-df_edges = pd.read_csv(edges_path).head(100)
+df_edges = pd.read_csv(edges_path).sample(sample_n_edges)
 df_nodes = pd.read_csv(nodes_path)\
     .set_index('node_id')
 
@@ -35,23 +43,55 @@ nodes_ids = set(
 )
 
 df_nodes = df_nodes[df_nodes.index.isin(nodes_ids)]
+
+df_nodes['tweet_count_scaled'] = MinMaxScaler().fit_transform(
+    df_nodes['Tweet Count']
+    .clip(upper=tweet_count_clip_value)
+    .values
+    .reshape(-1, 1)
+) * node_size * 2
+
+df_nodes['followers_scaled'] = MinMaxScaler().fit_transform(
+    df_nodes['Followers']
+    .clip(upper=followers_clip_value)
+    .values
+    .reshape(-1, 1)
+) * node_size * 2
+
+df_nodes['followers_c'] = [
+    colors.rgb2hex(c)
+    for c in cm.Blues(
+        colors.TwoSlopeNorm(
+            vmin=df_nodes['Followers'].min(),
+            vcenter=df_nodes['Followers'].mean(),
+            vmax=df_nodes['Followers'].max()
+        )(df_nodes['Followers'])
+    )
+]
+df_nodes['tweet_count_c'] = [
+    colors.rgb2hex(c)
+    for c in cm.Blues(
+        colors.TwoSlopeNorm(
+            vmin=df_nodes['Tweet Count'].min(),
+            vcenter=df_nodes['Tweet Count'].mean(),
+            vmax=df_nodes['Tweet Count'].max()
+        )(df_nodes['Tweet Count'])
+    )
+]
+df_nodes['sentiment_c'] = [
+    colors.rgb2hex(c)
+    for c in cm.coolwarm(
+        colors.TwoSlopeNorm(
+            vmin=-1,
+            vcenter=0,
+            vmax=1
+        )(df_nodes['Mean Sentiment'])
+    )
+]
+df_nodes['constant_c'] = 'gray'
+
 no_data_nodes = pd.Series(list(nodes_ids))
 no_data_nodes = no_data_nodes[~no_data_nodes.isin(df_nodes.index)].to_list()
-
-
-def get_node_data(id_, df):
-    try:
-        node = df.loc[id_]\
-            .rename({'name': 'label'})\
-            .to_dict()
-        node['id'] = id_
-    except KeyError:
-        node = {
-            k: None for k in df.rename({'name': 'label'}).columns
-        }
-        node['id'] = id_
-
-    return node
 
 
 cy_edges = []
@@ -70,7 +110,7 @@ for id_, edge in track(
         'id': id_,
         'source': str(source),
         'target': str(target),
-        'width': edge[dist_feature]
+        'width': edge[dist_feature]*weight_multiplier
     }}
     cy_edges.append(edge_dict)
 
@@ -84,7 +124,10 @@ for id_, node in track(
     cy_nodes.append(
         {
             "data": {**{'id': node.name}, **node.to_dict()},
-            "position": {"x": node.tsne_0*50, "y": node.tsne_1*50}
+            "position": {
+                "x": node.tsne_0*scale_multiplier,
+                "y": node.tsne_1*scale_multiplier
+            }
         }
     )
 
@@ -105,13 +148,16 @@ default_stylesheet = [
         "selector": 'node',
         'style': {
             "opacity": 0.65,
+            "height": node_size,
+            "width": node_size,
         }
     },
     {
         "selector": 'edge',
         'style': {
             "curve-style": "bezier",
-            "opacity": 0.2
+            "opacity": 0.2,
+            "width": "data(width)"
         }
     },
 ]
@@ -137,7 +183,7 @@ app.layout = html.Div([
             elements=cy_edges + cy_nodes,
             layout={
                 'name': 'preset',
-                'animate': True
+                'animate': False
             },
             style={
                 'height': '95vh',
@@ -209,10 +255,31 @@ app.layout = html.Div([
                         )
                     ]),
                 ]),
-
+                drc.NamedDropdown(
+                    name='Node color feature',
+                    id='input-color-feature',
+                    value='constant_c',
+                    clearable=False,
+                    options=drc.DropdownOptionsList(
+                        'constant_c',
+                        'sentiment_c',
+                        'tweet_count_c',
+                        'followers_c'
+                    )
+                ),
                 # Add the remaining configs here
                 html.H3('More stuff is going to go here'),
-
+                drc.NamedDropdown(
+                    name='Node Size',
+                    id='dropdown-node-size',
+                    value='constant',
+                    clearable=False,
+                    options=drc.DropdownOptionsList(
+                        'constant',
+                        'tweet_count_scaled',
+                        'followers_scaled'
+                    )
+                )
             ]),
 
             dcc.Tab(label='Data', children=[
@@ -235,14 +302,27 @@ app.layout = html.Div([
 
 # ############################## CALLBACKS ####################################
 
+# Uncomment and delete functions below if you want data on hover
+# @app.callback(Output('tap-node-json-output', 'children'),
+#               [Input('cytoscape', 'mouseoverNodeData')])
+# def display_tap_node(data):
+#     if data is not None:
+#         return json.dumps(data['data'], indent=2)
+#     else:
+#         return None
+#
+#
+# @app.callback(Output('tap-edge-json-output', 'children'),
+#               [Input('cytoscape', 'mouseoverEdgeData')])
+# def display_tap_edge(data):
+#     return json.dumps(data, indent=2)
+
 
 @app.callback(Output('tap-node-json-output', 'children'),
               [Input('cytoscape', 'tapNode')])
 def display_tap_node(data):
     if data is not None:
-        # Uncomment this later
-        # return json.dumps(data['data'], indent=2)
-        return json.dumps(data, indent=2)
+        return json.dumps(data['data'], indent=2)
     else:
         return None
 
@@ -259,26 +339,72 @@ def update_cytoscape_layout(layout):
     return {'name': layout}
 
 
-@app.callback(Output('cytoscape', 'stylesheet'),
-              [Input('cytoscape', 'tapNode'),
-               Input('input-follower-color', 'value'),
-               Input('input-following-color', 'value'),
-               Input('dropdown-node-shape', 'value')])
-def generate_stylesheet(node, follower_color, following_color, node_shape):
+@app.callback(
+    Output('cytoscape', 'stylesheet'),
+    [
+        Input('cytoscape', 'tapNode'),
+        Input('input-follower-color', 'value'),
+        Input('input-following-color', 'value'),
+        Input('dropdown-node-shape', 'value'),
+        Input('dropdown-node-size', 'value'),
+        Input('input-color-feature', 'value')
+    ]
+)
+def generate_stylesheet(
+    node,
+    follower_color,
+    following_color,
+    node_shape,
+    node_size,
+    color_feature
+):
     if not node:
+        index = {}
+        for i in range(len(default_stylesheet)):
+            index[default_stylesheet[i]['selector']] = i
+        default_stylesheet[
+            index['node']
+        ]['style']['height'] = (
+            f"data({node_size})"
+            if node_size != 'constant'
+            else scale_multiplier
+        )
+        default_stylesheet[
+            index['node']
+        ]['style']['width'] = (
+            f"data({node_size})"
+            if node_size != 'constant'
+            else scale_multiplier
+        )
+        default_stylesheet[
+            index['node']
+        ]['style']['background-color'] = f'data({color_feature})'
+
         return default_stylesheet
 
     stylesheet = [{
         "selector": 'node',
         'style': {
-            'opacity': 0.3,
-            'shape': node_shape
+            'opacity': 0.35,
+            'shape': node_shape,
+            'background-color': f'data({color_feature})',
+            'height': (
+                f"data({node_size})"
+                if node_size != 'constant'
+                else scale_multiplier
+            ),
+            'width': (
+                f"data({node_size})"
+                if node_size != 'constant'
+                else scale_multiplier
+            ),
         }
     }, {
         'selector': 'edge',
         'style': {
-            'opacity': 0.05,
+            'opacity': 0.1,
             "curve-style": "bezier",
+            "width": "data(width)"
         }
     }, {
         "selector": 'node[id = "{}"]'.format(node['data']['id']),
