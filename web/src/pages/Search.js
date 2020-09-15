@@ -276,7 +276,7 @@ function SearchPage() {
                                         </TableRow>
                                         <Highlight
                                             highlight={row.highlight}
-                                            field='full_text_processed'
+                                            field='full_text_trans'
                                         />
                                         <TableRow>
                                             <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
@@ -288,7 +288,7 @@ function SearchPage() {
                                                     <Grid container spacing={3}>
                                                         <Grid item xs={12}>
                                                             <div style={{display:'inline',whiteSpace:'pre-wrap'}}>
-                                                                <b>Page Text:</b> {row._source['full_text_processed'].split(".").join("\n")}
+                                                                <b>Page Text:</b> {row._source['full_text_trans'].split(".").join("\n")}
                                                             </div>
                                                         </Grid>
                                                     </Grid>

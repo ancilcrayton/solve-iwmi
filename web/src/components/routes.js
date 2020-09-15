@@ -9,8 +9,9 @@ import Button from '@material-ui/core/Button';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import Scraper from '../pages/Scraper'
+import Dashboard from '../pages/Dashboard'
 import SearchPage from '../pages/Search'
+import Story from '../pages/Story'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -50,7 +51,10 @@ function Routes() {
                         Home
                     </Button> */}
                     <Button to={"/"} exact className={classes.menuButton} activeClassName={classes.active}  color="primary" component={NavLink} >
-                        Scraper
+                        Story
+                    </Button>
+                    <Button to={"/dashboard"} exact className={classes.menuButton} activeClassName={classes.active}  color="primary" component={NavLink} >
+                        Dashboard
                     </Button>
                     <Button to={"/search"} className={classes.menuButton} activeClassName={classes.active}  color="primary" component={NavLink} >
                         Search
@@ -59,7 +63,8 @@ function Routes() {
             </AppBar>
             <Switch>
                 {/* <Route exact path="/" component={Home} />  */}
-                <Route exact path="/" component={Scraper} />
+                <Route exact path="/" component={Story} />
+                <Route exact path="/dashboard" component={Dashboard} />
                 <Route exact path="/search" component={SearchPage} />
 
             </Switch>

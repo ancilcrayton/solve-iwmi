@@ -17,7 +17,7 @@ def createTableRows(filters):
 
         query['bool']['must'].append({
             "match": {
-                "full_text_processed": {
+                "full_text_trans": {
                     "query": filters['search']
                 }
             }
@@ -35,12 +35,12 @@ def createTableRows(filters):
             "post_tags" : ["</b></mark>"],
             "fragment_size":500,
             "fields": {
-                "full_text_processed": {
+                "full_text_trans": {
                     "highlight_query": {
                         "bool": {
                             "must": [{
                                     "match": {
-                                        "full_text_processed": {
+                                        "full_text_trans": {
                                             "query": filters['search']
                                         }
                                     }
