@@ -1,0 +1,222 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Alam \bgroup \em et al.\egroup
+  }{2018}]{Alam2018}
+Firoj Alam, Shafiq Joty, and Muhammad Imran.
+\newblock {Graph based semi-supervised learning with convolution neural
+  networks to classify crisis related tweets}.
+\newblock In {\em 12th International AAAI Conference on Web and Social Media,
+  ICWSM 2018}, 2018.
+
+\bibitem[\protect\citeauthoryear{Arachie \bgroup \em et al.\egroup
+  }{2020}]{Arachie2020}
+Chidubem Arachie, Manas Gaur, Sam Anzaroot, William Groves, Ke~Zhang, and
+  Alejandro Jaimes.
+\newblock {Unsupervised Detection of Sub-Events in Large Scale Disasters}.
+\newblock {\em Proceedings of the AAAI Conference on Artificial Intelligence},
+  34(01):354--361, 2020.
+
+\bibitem[\protect\citeauthoryear{Beer}{2020}]{introForbes}
+Tommy Beer.
+\newblock 500,000 families may be homeless due to devastation from cyclone
+  amphan.
+\newblock
+  \url{https://www.forbes.com/sites/tommybeer/2020/05/22/500000-families-may-be-homeless-due-to-devastation-from-cyclone-amphan/},
+  2020.
+\newblock Section: Business.
+
+\bibitem[\protect\citeauthoryear{Dutta \bgroup \em et al.\egroup
+  }{2018}]{Dutta2018}
+Soumi Dutta, Vibhash Chandra, Kanav Mehra, Asit~Kumar Das, Tanmoy Chakraborty,
+  and Saptarshi Ghosh.
+\newblock {Ensemble Algorithms for Microblog Summarization}.
+\newblock {\em IEEE Intelligent Systems}, 2018.
+
+\bibitem[\protect\citeauthoryear{Hallac \bgroup \em et al.\egroup
+  }{2019}]{Hallac2019}
+Ibrahim~R. Hallac, Semiha Makinist, Betul Ay, and Galip Aydin.
+\newblock {User2Vec: Social Media User Representation Based on Distributed
+  Document Embeddings}.
+\newblock In {\em 2019 International Conference on Artificial Intelligence and
+  Data Processing Symposium, IDAP 2019}. Institute of Electrical and
+  Electronics Engineers Inc., sep 2019.
+
+\bibitem[\protect\citeauthoryear{Hansen}{2020}]{introNasa}
+Kathryn Hansen.
+\newblock Amphan batters india, bangladesh.
+\newblock
+  \url{https://earthobservatory.nasa.gov/images/146749/amphan-batters-india-bangladesh},
+  May 2020.
+
+\bibitem[\protect\citeauthoryear{Hernandez-Suarez \bgroup \em et al.\egroup
+  }{2019}]{Hernandez-Suarez2019}
+Aldo Hernandez-Suarez, Gabriel Sanchez-Perez, Karina Toscano-Medina, Hector
+  Perez-Meana, Jose Portillo-Portillo, Victor Sanchez, and Luis
+  Javier~Garc{\'{i}}a Villalba.
+\newblock {Using twitter data to monitor natural disaster social dynamics: A
+  recurrent neural network approach with word embeddings and kernel density
+  estimation}.
+\newblock {\em Sensors (Switzerland)}, 2019.
+
+\bibitem[\protect\citeauthoryear{Hutto and Gilbert}{2014}]{Hutto2014}
+C.~J. Hutto and Eric Gilbert.
+\newblock {VADER: A parsimonious rule-based model for sentiment analysis of
+  social media text}.
+\newblock In {\em Proceedings of the 8th International Conference on Weblogs
+  and Social Media, ICWSM 2014}, 2014.
+
+\bibitem[\protect\citeauthoryear{Imran \bgroup \em et al.\egroup
+  }{2013a}]{Imran2013a}
+Muhammad Imran, Shady Elbassuoni, Carlos Castillo, Fernando Diaz, and Patrick
+  Meier.
+\newblock {Extracting information nuggets from disaster- Related messages in
+  social media}.
+\newblock In {\em ISCRAM 2013 Conference Proceedings - 10th International
+  Conference on Information Systems for Crisis Response and Management}, 2013.
+
+\bibitem[\protect\citeauthoryear{Imran \bgroup \em et al.\egroup
+  }{2013b}]{Imran2013}
+Muhammad Imran, Shady Elbassuoni, Carlos Castillo, Fernando Diaz, and Patrick
+  Meier.
+\newblock {Practical extraction of disaster-relevant information from social
+  media}.
+\newblock In {\em WWW 2013 Companion - Proceedings of the 22nd International
+  Conference on World Wide Web}, 2013.
+
+\bibitem[\protect\citeauthoryear{Imran \bgroup \em et al.\egroup
+  }{2014}]{Imran2014}
+Muhammad Imran, Carlos Castillo, Ji~Lucas, Patrick Meier, and Sarah Vieweg.
+\newblock {AIDR: Artificial intelligence for disaster response}.
+\newblock In {\em WWW 2014 Companion - Proceedings of the 23rd International
+  Conference on World Wide Web}, 2014.
+
+\bibitem[\protect\citeauthoryear{Imran \bgroup \em et al.\egroup
+  }{2015}]{Imran2015}
+Muhammad Imran, Carlos Castillo, Fernando Diaz, and Sarah Vieweg.
+\newblock {Processing social media messages in Mass Emergency: A survey}.
+\newblock {\em ACM Computing Surveys}, 2015.
+
+\bibitem[\protect\citeauthoryear{Internet and of India}{2019}]{conclIAMAI}
+Internet and Mobile~Association of~India.
+\newblock India internet 2019, 2019.
+
+\bibitem[\protect\citeauthoryear{Le and Mikolov}{2014}]{Le2014}
+Quoc Le and Tomas Mikolov.
+\newblock {Distributed representations of sentences and documents}.
+\newblock In {\em 31st International Conference on Machine Learning, ICML
+  2014}, 2014.
+
+\bibitem[\protect\citeauthoryear{Lewis \bgroup \em et al.\egroup
+  }{2019}]{lewis2019bart}
+Mike Lewis, Yinhan Liu, Naman Goyal, Marjan Ghazvininejad, Abdelrahman Mohamed,
+  Omer Levy, Ves Stoyanov, and Luke Zettlemoyer.
+\newblock Bart: Denoising sequence-to-sequence pre-training for natural
+  language generation, translation, and comprehension, 2019.
+
+\bibitem[\protect\citeauthoryear{Loper and Bird}{2002}]{Loper02nltk:the}
+Edward Loper and Steven Bird.
+\newblock Nltk: The natural language toolkit.
+\newblock In {\em Proceedings of the ACL Workshop on Effective Tools and
+  Methodologies for Teaching Natural Language Processing and Computational
+  Linguistics. Philadelphia: Association for Computational Linguistics}, 2002.
+
+\bibitem[\protect\citeauthoryear{Mehra and Chandra}{2017}]{Mehra2017}
+Kanav Mehra and Vibhash Chandra.
+\newblock {Summarizing microblogs for emergency relief and preparedness}.
+\newblock In {\em CEUR Workshop Proceedings}, 2017.
+
+\bibitem[\protect\citeauthoryear{Mukherji}{2020}]{introIwmi}
+Aditi Mukherji.
+\newblock Cyclone amphan and covid-19: the recipe for a cascading disaster.
+\newblock
+  \url{http://www.iwmi.cgiar.org/2020/06/cyclone-amphan-and-covid-19-the-recipe-for-a-cascading-disaster/},
+  June 2020.
+
+\bibitem[\protect\citeauthoryear{of Red~Cross and
+  Societies}{2020}]{introRedcross}
+International~Federation of~Red~Cross and Red~Crescent Societies.
+\newblock Operation update report india: Cyclone amphan.
+\newblock
+  \url{https://reliefweb.int/report/india/india-cyclone-amphan-operation-update-report-dref-n-mdrin025},
+  July 2020.
+
+\bibitem[\protect\citeauthoryear{of West~Bengal}{2020}]{introState}
+State Inter Agency~Group of~West~Bengal.
+\newblock Joint rapid need assessment report on cyclone amphan, June 2020.
+
+\bibitem[\protect\citeauthoryear{Pourebrahim \bgroup \em et al.\egroup
+  }{2019}]{Pourebrahim2019}
+Nastaran Pourebrahim, Selima Sultana, John Edwards, Amanda Gochanour, and Somya
+  Mohanty.
+\newblock {Understanding communication dynamics on Twitter during natural
+  disasters: A case study of Hurricane Sandy}.
+\newblock {\em International Journal of Disaster Risk Reduction},
+  37(May):101176, 2019.
+
+\bibitem[\protect\citeauthoryear{Ragini \bgroup \em et al.\egroup
+  }{2018}]{Ragini2018}
+J.~Rexiline Ragini, P.~M.Rubesh Anand, and Vidhyacharan Bhaskar.
+\newblock {Big data analytics for disaster response and recovery through
+  sentiment analysis}.
+\newblock {\em International Journal of Information Management}, 2018.
+
+\bibitem[\protect\citeauthoryear{Rudra \bgroup \em et al.\egroup
+  }{2015}]{Rudra2015}
+Koustav Rudra, Subham Ghosh, Niloy Ganguly, Pawan Goyal, and Saptarshi Ghosh.
+\newblock {Extracting situational information from microblogs during disaster
+  events: A classification-summarization approach}.
+\newblock In {\em International Conference on Information and Knowledge
+  Management, Proceedings}, 2015.
+
+\bibitem[\protect\citeauthoryear{Rudra \bgroup \em et al.\egroup
+  }{2016}]{Rudra2016}
+Koustav Rudra, Siddhartha Banerjee, Niloy Ganguly, Pawan Goyal, Muhammad Imran,
+  and Prasenjit Mitra.
+\newblock {Summarizing situational tweets in crisis scenario}.
+\newblock In {\em HT 2016 - Proceedings of the 27th ACM Conference on Hypertext
+  and Social Media}, 2016.
+
+\bibitem[\protect\citeauthoryear{Rudra \bgroup \em et al.\egroup
+  }{2018}]{Rudra2018}
+Koustav Rudra, Pawan Goyal, Niloy Ganguly, Prasenjit Mitra, and Muhammad Imran.
+\newblock {Identifying sub-events and summarizing disaster-related information
+  from microblogs}.
+\newblock {\em 41st International ACM SIGIR Conference on Research and
+  Development in Information Retrieval, SIGIR 2018}, pages 265--274, 2018.
+
+\bibitem[\protect\citeauthoryear{To \bgroup \em et al.\egroup }{2017}]{To2017}
+Hien To, Sumeet Agrawal, Seon~Ho Kim, and Cyrus Shahabi.
+\newblock {On Identifying Disaster-Related Tweets: Matching-Based or
+  Learning-Based}.
+\newblock {\em Proceedings - 2017 IEEE 3rd International Conference on
+  Multimedia Big Data, BigMM 2017}, pages 330--337, 2017.
+
+\bibitem[\protect\citeauthoryear{{Van Der Maaten} and
+  Hinton}{2008}]{VanDerMaaten2008}
+Laurens {Van Der Maaten} and Geoffrey Hinton.
+\newblock {Visualizing data using t-SNE}.
+\newblock {\em Journal of Machine Learning Research}, 2008.
+
+\bibitem[\protect\citeauthoryear{Williams \bgroup \em et al.\egroup
+  }{2018}]{N18-1101}
+Adina Williams, Nikita Nangia, and Samuel Bowman.
+\newblock A broad-coverage challenge corpus for sentence understanding through
+  inference.
+\newblock In {\em Proceedings of the 2018 Conference of the North American
+  Chapter of the Association for Computational Linguistics: Human Language
+  Technologies, Volume 1 (Long Papers)}, pages 1112--1122. Association for
+  Computational Linguistics, 2018.
+
+\bibitem[\protect\citeauthoryear{Yin \bgroup \em et al.\egroup
+  }{2019}]{yin2019benchmarking}
+Wenpeng Yin, Jamaal Hay, and Dan Roth.
+\newblock Benchmarking zero-shot text classification: Datasets, evaluation and
+  entailment approach, 2019.
+
+\bibitem[\protect\citeauthoryear{Zhang and Vucetic}{2016}]{Zhang2016}
+Shanshan Zhang and Slobodan Vucetic.
+\newblock {Semi-supervised Discovery of Informative Tweets During the Emerging
+  Disasters}.
+\newblock 2016.
+
+\end{thebibliography}
