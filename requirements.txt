@@ -4,7 +4,6 @@
 # external requirements
 bokeh
 click
-Sphinx
 searchtweets
 coverage
 awscli
@@ -31,3 +30,12 @@ transformers
 tqdm
 pointofview
 
+# for documentation purposes
+Sphinx
+sphinx-material
+numpydoc
+sphinx_gallery
+recommonmark
+nbsphinx
+sphinx_markdown_tables
+sphinx_copybutton

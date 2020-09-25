@@ -40,7 +40,8 @@ def pull_tweets(
     The data received from the API is stored in its original form (JSON)
     without performing any type of preprocessing.
 
-    TODO: Params documentation
+    :parameter query: TODO
+    :return: None
     """
 
     logger = logging.getLogger(__name__)
@@ -76,6 +77,7 @@ def pull_tweets(
 
     logger.info('Data successfuly saved at'
                 + f'\"{os.path.join(save_path, file_name)}\"')
+    return None
 
 
 def count_tweets(

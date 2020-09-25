@@ -1,6 +1,10 @@
 # YAML config files
 twitter_creds.yaml
 
+# Documentation auto-generated stuff
+doc/_build/
+doc/generated/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
