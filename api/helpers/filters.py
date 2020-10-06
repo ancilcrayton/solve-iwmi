@@ -1,103 +1,72 @@
-def createQueryFilters(filters,index):
-    query = []
-    topic_filter = False
+from dateutil import parser
 
-    if 'ied' in filters and filters['ied']:
+def createQueryFilters(filters):
+    query = []
+
+    if 'verified' in filters and filters['verified']:
 
         query.append({
-          "term":{"model_ied":1}
+          "term":{"verified":True}
         })
-    if 'domain' in filters and filters['domain'] and index == 'html':
         
+    if 'topics' in filters and filters['topics']:
         query.append({
             'bool':{
                 'should':list(map(
-                    lambda x:{'term':{'domain.keyword':x}} ,
-                    filters['domain']
+                    lambda x:{'term':{'topics.keyword':x}} ,
+                    filters['topics']
                 ))
             }
         })
 
-    if 'dictionary' in filters and filters['dictionary'] and index == 'html':
+    if 'pov' in filters and filters['pov']:
+        query.append({
+            'bool':{
+                'must':{'term':{'pov.keyword':filters['pov']}}
+            }
+        })
+
+    if 'lang' in filters and filters['lang']:
     
         query.append({
             'bool':{
-                'should':list(map(
-                    lambda x:{'term':{'tags.keyword':x}} ,
-                    filters['dictionary']
-                ))
+                'must':{'term':{'lang.keyword':filters['lang']}}
             }
         })
 
     if 'endDate' in filters and filters['endDate']:
-        if index == 'acled':
-            query.append({
-                "range":{"event_date":{'lte':filters['endDate'][0:10]}}
-            })
-        elif index == 'html':
-            query.append({
-                "range":{"dateAdded":{'lte':filters['endDate'][0:10]}}
-            })
+        query.append({
+            "range":{"tweet_created_at":{'lte':parser.parse(filters['endDate']).timestamp()* 1000}}
+        })
 
     if 'startDate' in filters and filters['startDate']:
-        if index == 'acled':
-            query.append({
-                "range":{"event_date":{'gte':filters['startDate'][0:10]}}
-            })
-        elif index == 'html':
-             query.append({
-                "range":{"dateAdded":{'gte':filters['startDate'][0:10]}}
-            })
+        query.append({
+            "range":{"tweet_created_at":{'gte':parser.parse(filters['startDate']).timestamp()* 1000}}
+        })
 
-    if 'country' in filters and filters['country']:
+    if 'sentStart' in filters and filters['sentStart']:
+        query.append({
+            "range":{"sentiment":{'gte':filters['sentStart']}}
+        })
+
+    if 'sentEnd' in filters and filters['sentEnd']:
+        query.append({
+            "range":{"sentiment":{'lte':filters['sentEnd']}}
+        })
+
+    if 'search' in filters and filters['search']:
 
         query.append({
             'bool':{
-                'should':list(map(
-                    lambda x:{'term':{'country.keyword':x}} ,
-                    filters['country']
-                ))
+                'must':{
+                    "match": {
+                        "full_text_trans": {
+                            "query": filters['search']
+                        }
+                    }
+                }
             }
         })
-
-    if 'event' in filters and filters['event']:
-
-        query.append({
-            'bool':{
-                'should':list(map(
-                    lambda x:{'term':{'event_type.keyword':x}} ,
-                    filters['event']
-                ))
-            }
-        })
-
-    if 'actor' in filters and filters['actor']:
-        actors = list(map(
-                    lambda x:{'term':{'actor1.keyword':x}},
-                    filters['actor']
-                )) + list(map(
-                    lambda x:{'term':{'actor2.keyword':x}},
-                    filters['actor']
-                ))
-
-        query.append({
-            'bool':{
-                'should':actors
-            }
-        })
-
-    if 'source' in filters and filters['source']:
-
-        query.append({
-            'bool':{
-                'should':list(map(
-                    lambda x:{'term':{'source.keyword':x}} ,
-                    filters['source']
-                ))
-            }
-        })
-    
-
 
     body = {
         'bool':{
@@ -105,4 +74,4 @@ def createQueryFilters(filters,index):
         }
     }
 
-    return body,topic_filter
+    return body

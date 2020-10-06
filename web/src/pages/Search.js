@@ -1,7 +1,6 @@
 import React, {useEffect, useState, Fragment} from 'react';
 import axios from 'axios'
 import { makeStyles } from '@material-ui/core/styles';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import { 
     Grid,
     Card,
@@ -20,8 +19,11 @@ import {
     IconButton,
     InputAdornment,
     Select,
+    Switch,
+    Slider,
     MenuItem,
     FormControl,
+    FormControlLabel,
     InputLabel
 } from '@material-ui/core';
 import {
@@ -72,22 +74,21 @@ function SearchPage() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [total, setTotal] = React.useState(5);
-    const [selects,setSelect] = useState({dictionary:[]})
-    const [filters, setFilters] = useState({})
-    const [filterOptions, setFilterOptions] = useState({
-        domains:[],
+    const [selects,setSelect] = useState({
+        topics:[],
+        pov:[],
+        lang:[]
     })
+    const [verified, setVerified] = React.useState(false);
+    const [sentiment, setSentiment] = React.useState([-1, 1]);
 
-    const onSelectChange = (event, values,name) => {
-        setFilters(prevState => {
-            return {
-                ...prevState,
-                [name]:values.map((option) => option.key ? option.key : option)
-            }
-        });
-        setRows([])
-    }
+    const handleChangeSent = (event, newValue) => {
+        setSentiment(newValue);
+    };
 
+    const handleChangeVer = (event) => {
+        setVerified(event.target.checked);
+    };
     const loadData = (reload) => {
         var from;
         if(reload){
@@ -103,8 +104,12 @@ function SearchPage() {
                 startDate:startDate,
                 endDate:endDate,
                 search:textBox.search,
-                domain:filters.domain,
-                dictionary:selects.dictionary,
+                topics:selects.topics,
+                lang:selects.lang,
+                pov:selects.pov,
+                verified:verified,
+                sentStart:sentiment[0],
+                sentEnd:sentiment[1],
                 size:rowsPerPage,
                 from:from
             }
@@ -130,7 +135,7 @@ function SearchPage() {
 
     useEffect(() => {
         loadData(true)
-    }, [startDate,endDate,filters,selects]);
+    }, [startDate,endDate,selects,sentiment,verified]);
 
     useEffect(()=>{
         if(page !== 0 && (rowsPerPage*page+rowsPerPage*2) > rows.length){
@@ -141,26 +146,26 @@ function SearchPage() {
         }
     },[rowsPerPage,page])
     
-    useEffect(() => {
-        const loadFilterOptions = () => {
-            axios({
-                method:'get',
-                url:'http://localhost:8080/filters/scraper'
-            }).then(response => {
-                const data = response.data
-                setFilterOptions(prevState => {
-                    return {
-                        ...prevState,
-                        domains:data.domains,
-                    }
-                });
-            }).catch(error => {
-                console.log('error',error)
-            })
-        }
+    // useEffect(() => {
+    //     const loadFilterOptions = () => {
+    //         axios({
+    //             method:'get',
+    //             url:'http://localhost:8080/filters/scraper'
+    //         }).then(response => {
+    //             const data = response.data
+    //             setFilterOptions(prevState => {
+    //                 return {
+    //                     ...prevState,
+    //                     domains:data.domains,
+    //                 }
+    //             });
+    //         }).catch(error => {
+    //             console.log('error',error)
+    //         })
+    //     }
 
-        loadFilterOptions()
-    }, []);
+    //     loadFilterOptions()
+    // }, []);
     
     return (
         <div style={{ padding: 15 }}>
@@ -199,43 +204,102 @@ function SearchPage() {
                                     changeEndDate={changeEndDate}
                                     setRows={setRows}
                                 />
-                                <Grid item lg={2} xs={6}>
+                                <Grid item lg={1} xs={4}>
+                                    <FormControl row style={{marginTop:'25px'}}>
+                                        <FormControlLabel
+                                            control={<Switch checked={verified} onChange={handleChangeVer} name="verified" color="primary"/>}
+                                            label="Verified"
+                                        />
+                                    </FormControl>
+                                </Grid>
+                                <Grid item lg={2} xs={4}>
+                                    <InputLabel>Sentiment Range</InputLabel>
+                                    <Slider
+                                        style={{marginTop:'25px'}}
+                                        value={sentiment}
+                                        onChange={handleChangeSent}
+                                        valueLabelDisplay="auto"
+                                        aria-labelledby="range-slider"
+                                        min={-1}
+                                        max={1}
+                                        step={.05}
+                                    />
+                                </Grid>
+                                <Grid item lg={3} xs={6}>
                                     <FormControl className={classes.formControl}>
-                                        <InputLabel> Dictionary </InputLabel>
+                                        <InputLabel>Topics</InputLabel>
                                         <Select
                                             multiple
-                                            id="dictionary"
-                                            name="dictionary"
+                                            id="topics"
+                                            name="topics"
                                             onChange={handleSelect(setSelect)}
-                                            value={selects.dictionary}
+                                            value={selects.topics}
                                         >
-                                            <MenuItem value={'IED'}>IED</MenuItem>
-                                            <MenuItem value={'UAS'}>UAS</MenuItem>
-                                            <MenuItem value={'CBRNE'}>CBRNE</MenuItem>
-                                            <MenuItem value={'SUB-T'}>SUB-T</MenuItem>
+                                            <MenuItem value={'relief measures'}>Relief Measures</MenuItem>
+                                            <MenuItem value={'news updates'}>News Updates</MenuItem>
+                                            <MenuItem value={'donation'}>Donation</MenuItem>
+                                            <MenuItem value={'compensation'}>Compensation</MenuItem>
+                                            <MenuItem value={'government'}>Government</MenuItem>
+                                            <MenuItem value={'sympathy'}>Sympathy</MenuItem>
+                                            <MenuItem value={'hope'}>Hope</MenuItem>
+                                            <MenuItem value={'evacuation'}>Evacuation</MenuItem>
+                                            <MenuItem value={'job'}>Job</MenuItem>
+                                            <MenuItem value={'petition'}>Petition</MenuItem>
+                                            <MenuItem value={'utilities'}>Utilities</MenuItem>
+                                            <MenuItem value={'power supply'}>Power Supply</MenuItem>
+                                            <MenuItem value={'poverty'}>Poverty</MenuItem>
+                                            <MenuItem value={'medical assistance'}>Medical Assistance</MenuItem>
+                                            <MenuItem value={'volunteers'}>Volunteers</MenuItem>
+                                            <MenuItem value={'ecosystem'}>Ecosystem</MenuItem>
+                                            <MenuItem value={'housing'}>Housing</MenuItem>
+                                            <MenuItem value={'farm'}>Farm</MenuItem>
+                                            <MenuItem value={'corruption'}>Corruption</MenuItem>
+                                            <MenuItem value={'cellular network'}>Cellular Network</MenuItem>
+                                            <MenuItem value={'coronavirus'}>Coronavirus</MenuItem>
+                                            <MenuItem value={'food supply'}>Food Supply</MenuItem>
+                                            <MenuItem value={'criticism'}>Criticism</MenuItem>
+                                            <MenuItem value={'water supply'}>Water Supply</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
                                 <Grid item lg={3} xs={6}>
-                                    <Autocomplete
-                                        className={classes.autocomplete}
-                                        multiple
-                                        id="domain-auto"
-                                        options={filterOptions.domains}
-                                        getOptionLabel={option => option.key}
-                                        onChange={(event,values) => onSelectChange(event,values,'domain') }
-                                        renderInput={params => (
-                                        <TextField
-                                            {...params}
-                                            variant="standard"
-                                            label="Website"
-                                            placeholder="Website"
-                                            fullWidth
-                                        />
-                                        )}
-                                    />
+                                    <FormControl className={classes.formControl}>
+                                        <InputLabel>POV</InputLabel>
+                                        <Select
+                                            id="pov"
+                                            name="pov"
+                                            onChange={handleSelect(setSelect)}
+                                            value={selects.pov}
+                                        >
+                                            <MenuItem value={'None'}>None</MenuItem>
+                                            <MenuItem value={'first'}>First Person</MenuItem>
+                                            <MenuItem value={'second'}>Second Person</MenuItem>
+                                            <MenuItem value={'third'}>Third Person</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </Grid>
-
+                                <Grid item lg={3} xs={6}>
+                                    <FormControl className={classes.formControl}>
+                                        <InputLabel>Language</InputLabel>
+                                        <Select
+                                            id="lang"
+                                            name="lang"
+                                            onChange={handleSelect(setSelect)}
+                                            value={selects.lang}
+                                        >
+                                            <MenuItem value={'en'}>English</MenuItem>
+                                            <MenuItem value={'hi'}>Hindi</MenuItem>
+                                            <MenuItem value={'bn'}>Bengali</MenuItem>
+                                            <MenuItem value={'es'}>Spanish</MenuItem>
+                                            <MenuItem value={'or'}>Oriya</MenuItem>
+                                            <MenuItem value={'fr'}>French</MenuItem>
+                                            <MenuItem value={'in'}>Indonesian</MenuItem>
+                                            <MenuItem value={'ja'}>Japanese</MenuItem>
+                                            <MenuItem value={'de'}>German</MenuItem>
+                                            <MenuItem value={'und'}>Undefined</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
                             </Grid>
 
                         </CardContent>
@@ -246,9 +310,13 @@ function SearchPage() {
                         <Table className={classes.table} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>URL</TableCell>
-                                    <TableCell>Tags</TableCell>
-                                    <TableCell align="left">Terms</TableCell>
+                                    <TableCell>Tweet ID</TableCell>
+                                    <TableCell>Sentiment</TableCell>
+                                    <TableCell>POV</TableCell>
+                                    <TableCell align="left">Retweets</TableCell>
+                                    <TableCell align="left">Favorites</TableCell>
+                                    <TableCell align="left">Replies</TableCell>
+                                    <TableCell align="left">Followers</TableCell>
                                     <TableCell align="left">Date Added</TableCell>
                                     <TableCell></TableCell>
                                 </TableRow>
@@ -257,10 +325,14 @@ function SearchPage() {
                                 {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,i) => 
                                     <Fragment key={"row_"+i}>
                                         <TableRow key={"row_"+i}>
-                                            <TableCell component="th" scope="left"><a href={row._id} target="_blank">{row._id}</a></TableCell>
-                                            <TableCell align="left">{row._source['tags']}</TableCell>
-                                            <TableCell align="left">{row._source['terms']}</TableCell>
-                                            <TableCell align="left">{row._source['dateAdded']}</TableCell>
+                                            <TableCell component="th" scope="left">{row._id}</TableCell>
+                                            <TableCell align="left">{row._source['sentiment'].toFixed(2)}</TableCell>
+                                            <TableCell align="left">{row._source['pov'] ? row._source['pov'] :'None'}</TableCell>
+                                            <TableCell align="left">{row._source['retweet_count']}</TableCell>
+                                            <TableCell align="left">{row._source['favorite_count']}</TableCell>
+                                            <TableCell align="left">{row._source['reply_count']}</TableCell>
+                                            <TableCell align="left">{row._source['followers_count']}</TableCell>
+                                            <TableCell align="left">{new Date(row._source['tweet_created_at']).toLocaleDateString("en-US")}</TableCell>
                                             <TableCell align="left">
                                                 <IconButton
                                                     className={clsx(classes.expand, {
@@ -285,13 +357,30 @@ function SearchPage() {
                                                     timeout="auto"
                                                     unmountOnExit
                                                 >
-                                                    <Grid container spacing={3}>
-                                                        <Grid item xs={12}>
+                                                    <Grid container spacing={4}>
+                                                        <Grid item xs={4}>
                                                             <div style={{display:'inline',whiteSpace:'pre-wrap'}}>
-                                                                <b>Page Text:</b> {row._source['full_text_trans'].split(".").join("\n")}
+                                                                <b>Full Tweet:</b> {row._source['full_text_trans'].split(".").join("\n")}
                                                             </div>
                                                         </Grid>
+                                                        <Grid item xs={2}>
+                                                            <b>Topics:</b>
+                                                            <ul>
+                                                                {row._source['topics'] ? row._source['topics'].map((row,i) => 
+                                                                    <li>{row} </li>
+                                                                ) : ''}
+                                                            </ul>
+                                                        </Grid>
+                                                        <Grid item xs={4}>
+                                                            <b>Similar Tweets:</b>
+                                                            <ol>
+                                                                {row._source['most_similar_tweets'] ? row._source['most_similar_tweets'].slice(0,5).map((row,i) => 
+                                                                    <li>{row.text} </li>
+                                                                ) : ''}
+                                                            </ol>
+                                                        </Grid>
                                                     </Grid>
+                                                    
                                                 </Collapse>
                                             </TableCell>
                                         </TableRow>

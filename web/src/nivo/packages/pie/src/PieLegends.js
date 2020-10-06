@@ -13,7 +13,7 @@ import withPropsOnChange from 'recompose/withPropsOnChange'
 import pure from 'recompose/pure'
 import setDisplayName from 'recompose/setDisplayName'
 import { themePropType } from '@nivo/core'
-import { LegendPropShape, BoxLegendSvg } from '@nivo/legends'
+import { LegendPropShape, BoxLegendSvg } from  '../../legends/src'
 import { arcPropType } from './props'
 
 class PieLegends extends Component {

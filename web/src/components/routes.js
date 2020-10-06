@@ -50,10 +50,8 @@ function Routes() {
                     {/* <Button to={"/"} exact className={classes.menuButton} activeClassName={classes.active} color="primary" component={NavLink} >
                         Home
                     </Button> */}
+
                     <Button to={"/"} exact className={classes.menuButton} activeClassName={classes.active}  color="primary" component={NavLink} >
-                        Story
-                    </Button>
-                    <Button to={"/dashboard"} exact className={classes.menuButton} activeClassName={classes.active}  color="primary" component={NavLink} >
                         Dashboard
                     </Button>
                     <Button to={"/search"} className={classes.menuButton} activeClassName={classes.active}  color="primary" component={NavLink} >
@@ -63,8 +61,7 @@ function Routes() {
             </AppBar>
             <Switch>
                 {/* <Route exact path="/" component={Home} />  */}
-                <Route exact path="/" component={Story} />
-                <Route exact path="/dashboard" component={Dashboard} />
+                <Route exact path="/" component={Dashboard} />
                 <Route exact path="/search" component={SearchPage} />
 
             </Switch>

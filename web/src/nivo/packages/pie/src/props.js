@@ -9,7 +9,7 @@
 import PropTypes from 'prop-types'
 import { noop, radiansToDegrees } from '@nivo/core'
 import { ordinalColorsPropType, inheritedColorPropType } from '@nivo/colors'
-import { LegendPropShape } from '@nivo/legends'
+import { LegendPropShape } from '../../legends/src'
 
 export const arcPropType = PropTypes.shape({
     startAngle: PropTypes.number.isRequired,

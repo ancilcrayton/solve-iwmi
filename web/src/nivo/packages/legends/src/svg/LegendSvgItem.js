@@ -82,7 +82,7 @@ const LegendSvgItem = ({
         }
 
         if (onMouseLeave === undefined) return
-        onMouseLeave(data, event)
+        onMouseLeave(data, window.event)
     }, [onMouseLeave, data, effects])
 
     const { symbolX, symbolY, labelX, labelY, labelAnchor, labelAlignment } = computeItemLayout({

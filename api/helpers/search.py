@@ -1,10 +1,13 @@
+import sys
+from pprint import pprint
+
 from database import es
 from helpers.filters import createQueryFilters
 
 
 def createTableRows(filters):
 
-    query,topic_filter = createQueryFilters(filters,'html')
+    query = createQueryFilters(filters)
 
     body={
         'query':query,   
@@ -15,13 +18,6 @@ def createTableRows(filters):
 
     if 'search' in filters and filters['search']:
 
-        query['bool']['must'].append({
-            "match": {
-                "full_text_trans": {
-                    "query": filters['search']
-                }
-            }
-        })
         query['bool']['must'].append({
             "match": {
                 "is_retweet": {
@@ -50,7 +46,9 @@ def createTableRows(filters):
                 }
             }
         }
-
+        
+    pprint(body)
+    sys.stdout.flush()
     rows = es.search(index = 'twitter',body=body)
 
     return rows['hits']

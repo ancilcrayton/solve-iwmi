@@ -38,7 +38,7 @@ function DateFilters(props){
 
     return (
         <Fragment>
-            <Grid item lg={3} xs={6}>
+            <Grid item lg={2} xs={6}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
                         className={classes.date}
@@ -49,14 +49,17 @@ function DateFilters(props){
                         id="start-date"
                         label="Start Date"
                         value={props.startDate}
+                        initialFocusedDate={new Date(2020,4,19)}
                         onChange={date => handleStartDateChange(date,props.changeStartDate,props.setRows)}
+                        minDate={new Date(2020,4,18)}
+                        maxDate={new Date(2020,5,14)}
                         KeyboardButtonProps={{
                             'aria-label': 'change date',
                         }}
                     />
                 </MuiPickersUtilsProvider>
             </Grid>
-            <Grid item lg={3} xs={6}>
+            <Grid item lg={2} xs={6}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
                         className={classes.date}
@@ -67,6 +70,9 @@ function DateFilters(props){
                         id="end-date"
                         label="End Date"
                         value={props.endDate}
+                        minDate={new Date(2020,4,18)}
+                        maxDate={new Date(2020,5,14)}
+                        initialFocusedDate={new Date(2020,5,13)}
                         onChange={date => handleEndDateChange(date,props.changeEndDate,props.setRows)}
                         KeyboardButtonProps={{
                             'aria-label': 'change date',

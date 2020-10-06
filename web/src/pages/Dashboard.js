@@ -1,11 +1,31 @@
-import React, { useRef,useState } from 'react';
-
-import Grid from '@material-ui/core/Grid';
+import React, {useEffect, useRef,useState } from 'react';
+import axios from 'axios'
+import { 
+  Grid,
+  Card,
+  CardContent,
+  TextField,
+  IconButton,
+  InputAdornment,
+  Select,
+  Switch,
+  Slider,
+  MenuItem,
+  FormControl,
+  FormControlLabel,
+  InputLabel
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-
+import {
+  Search
+} from '@material-ui/icons';
+import ReactWordcloud from "react-wordcloud";
 import ResponsiveNetwork  from '../nivo/packages/network/src/ResponsiveNetwork'
+import ResponsiveBar from '../nivo/packages/bar/src/ResponsiveBar'
+import ResponsivePie from '../nivo/packages/pie/src/ResponsivePie'
+
+import DateFilters from '../components/dateFilters'
+import {handleSelect,onTextChange } from '../helpers/helpers'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -16,15 +36,21 @@ const useStyles = makeStyles(theme => ({
     center:{
       textAlign:'center'
     },
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
+    formControl:{
+      width:'100%',
+      marginTop:'16px',
+      marginBottom:'8px'
     },
     selectEmpty: {
       marginTop: theme.spacing(2),
     },
     displayLinebreak:{
       whiteSpace: "pre-line"
+    },
+    textBox:{
+      width:"80%",
+      marginTop:'16px',
+      marginBottom:'8px'
     },
     textarea:{
       height:'100%',
@@ -36,1658 +62,277 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const formater = new Intl.NumberFormat('en-IN')
 
 function Dashboard() {
 
   const classes = useStyles();
+  const [rows, setRows] = useState([])
   const codeAreaRef = useRef(null);
-  const [nodes, setNodes] = useState([
-    {
-      "id": "1",
-      "radius": 8,
-      "depth": 1,
-      "color": "rgb(97, 205, 187)"
-    },
-    {
-      "id": "2",
-      "radius": 8,
-      "depth": 1,
-      "color": "rgb(97, 205, 187)"
-    },
-    {
-      "id": "3",
-      "radius": 8,
-      "depth": 1,
-      "color": "rgb(97, 205, 187)"
-    },
-    {
-      "id": "4",
-      "radius": 8,
-      "depth": 1,
-      "color": "rgb(97, 205, 187)"
-    },
-    {
-      "id": "5",
-      "radius": 8,
-      "depth": 1,
-      "color": "rgb(97, 205, 187)"
-    },
-    {
-      "id": "6",
-      "radius": 8,
-      "depth": 1,
-      "color": "rgb(97, 205, 187)"
-    },
-    {
-      "id": "7",
-      "radius": 8,
-      "depth": 1,
-      "color": "rgb(97, 205, 187)"
-    },
-    {
-      "id": "8",
-      "radius": 8,
-      "depth": 1,
-      "color": "rgb(97, 205, 187)"
-    },
-    {
-      "id": "9",
-      "radius": 8,
-      "depth": 1,
-      "color": "rgb(97, 205, 187)"
-    },
-    {
-      "id": "10",
-      "radius": 8,
-      "depth": 1,
-      "color": "rgb(97, 205, 187)"
-    },
-    {
-      "id": "11",
-      "radius": 8,
-      "depth": 1,
-      "color": "rgb(97, 205, 187)"
-    },
-    {
-      "id": "12",
-      "radius": 8,
-      "depth": 1,
-      "color": "rgb(97, 205, 187)"
-    },
-    {
-      "id": "13",
-      "radius": 8,
-      "depth": 1,
-      "color": "rgb(97, 205, 187)"
-    },
-    {
-      "id": "0",
-      "radius": 12,
-      "depth": 0,
-      "color": "rgb(244, 117, 96)"
-    },
-    {
-      "id": "1.0",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "1.1",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "1.2",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "1.3",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "2.0",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "2.1",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "2.2",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "2.3",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "2.4",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "2.5",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "2.6",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "2.7",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "2.8",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "2.9",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "2.10",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "2.11",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "2.12",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "3.0",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "3.1",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "3.2",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "3.3",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "3.4",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "3.5",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "3.6",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "3.7",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "3.8",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "3.9",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "3.10",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "3.11",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "3.12",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "3.13",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "3.14",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "4.0",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "4.1",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "4.2",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "4.3",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "4.4",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "5.0",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "5.1",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "5.2",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "5.3",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "5.4",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "5.5",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "5.6",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "5.7",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "5.8",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "5.9",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "5.10",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "5.11",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "6.0",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "6.1",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "6.2",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "6.3",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "6.4",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "6.5",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "6.6",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "6.7",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "6.8",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "6.9",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "6.10",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "6.11",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "6.12",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "6.13",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "6.14",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "7.0",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "7.1",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "7.2",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "7.3",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "7.4",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "7.5",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "7.6",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "7.7",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "8.0",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "8.1",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "8.2",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "8.3",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "8.4",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "8.5",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "8.6",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "8.7",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "8.8",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "9.0",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "9.1",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "9.2",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "9.3",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "10.0",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "10.1",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "10.2",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "10.3",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "10.4",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "10.5",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "10.6",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "10.7",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "10.8",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "10.9",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "10.10",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "10.11",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "10.12",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "10.13",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "10.14",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "11.0",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "11.1",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "11.2",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "11.3",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "11.4",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "11.5",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "11.6",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "11.7",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "11.8",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "11.9",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "11.10",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "11.11",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "11.12",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "11.13",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "11.14",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "12.0",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "12.1",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "12.2",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "12.3",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "12.4",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "12.5",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "12.6",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "13.0",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "13.1",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "13.2",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "13.3",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "13.4",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "13.5",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "13.6",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "13.7",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "13.8",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "13.9",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    },
-    {
-      "id": "13.10",
-      "radius": 4,
-      "depth": 2,
-      "color": "rgb(232, 193, 160)"
-    }
-  ])
-  const [links, setLinks] = useState([
-    {
-      "source": "0",
-      "target": "1",
-      "distance": 50
-    },
-    {
-      "source": "1",
-      "target": "1.0",
-      "distance": 30
-    },
-    {
-      "source": "1",
-      "target": "1.1",
-      "distance": 30
-    },
-    {
-      "source": "1",
-      "target": "1.2",
-      "distance": 30
-    },
-    {
-      "source": "1",
-      "target": "1.3",
-      "distance": 30
-    },
-    {
-      "source": "0",
-      "target": "2",
-      "distance": 50
-    },
-    {
-      "source": "2",
-      "target": "2.0",
-      "distance": 30
-    },
-    {
-      "source": "2",
-      "target": "2.1",
-      "distance": 30
-    },
-    {
-      "source": "2",
-      "target": "2.2",
-      "distance": 30
-    },
-    {
-      "source": "2",
-      "target": "2.3",
-      "distance": 30
-    },
-    {
-      "source": "2",
-      "target": "2.4",
-      "distance": 30
-    },
-    {
-      "source": "2",
-      "target": "2.5",
-      "distance": 30
-    },
-    {
-      "source": "2",
-      "target": "2.6",
-      "distance": 30
-    },
-    {
-      "source": "2",
-      "target": "2.7",
-      "distance": 30
-    },
-    {
-      "source": "2",
-      "target": "2.8",
-      "distance": 30
-    },
-    {
-      "source": "2",
-      "target": "2.9",
-      "distance": 30
-    },
-    {
-      "source": "2",
-      "target": "2.10",
-      "distance": 30
-    },
-    {
-      "source": "2",
-      "target": "2.11",
-      "distance": 30
-    },
-    {
-      "source": "2",
-      "target": "2.12",
-      "distance": 30
-    },
-    {
-      "source": "0",
-      "target": "3",
-      "distance": 50
-    },
-    {
-      "source": "3",
-      "target": "11",
-      "distance": 70
-    },
-    {
-      "source": "3",
-      "target": "3.0",
-      "distance": 30
-    },
-    {
-      "source": "3",
-      "target": "3.1",
-      "distance": 30
-    },
-    {
-      "source": "3",
-      "target": "3.2",
-      "distance": 30
-    },
-    {
-      "source": "3",
-      "target": "3.3",
-      "distance": 30
-    },
-    {
-      "source": "3",
-      "target": "3.4",
-      "distance": 30
-    },
-    {
-      "source": "3",
-      "target": "3.5",
-      "distance": 30
-    },
-    {
-      "source": "3",
-      "target": "3.6",
-      "distance": 30
-    },
-    {
-      "source": "3",
-      "target": "3.7",
-      "distance": 30
-    },
-    {
-      "source": "3",
-      "target": "3.8",
-      "distance": 30
-    },
-    {
-      "source": "3",
-      "target": "3.9",
-      "distance": 30
-    },
-    {
-      "source": "3",
-      "target": "3.10",
-      "distance": 30
-    },
-    {
-      "source": "3",
-      "target": "3.11",
-      "distance": 30
-    },
-    {
-      "source": "3",
-      "target": "3.12",
-      "distance": 30
-    },
-    {
-      "source": "3",
-      "target": "3.13",
-      "distance": 30
-    },
-    {
-      "source": "3",
-      "target": "3.14",
-      "distance": 30
-    },
-    {
-      "source": "0",
-      "target": "4",
-      "distance": 50
-    },
-    {
-      "source": "4",
-      "target": "4.0",
-      "distance": 30
-    },
-    {
-      "source": "4",
-      "target": "4.1",
-      "distance": 30
-    },
-    {
-      "source": "4",
-      "target": "4.2",
-      "distance": 30
-    },
-    {
-      "source": "4",
-      "target": "4.3",
-      "distance": 30
-    },
-    {
-      "source": "4",
-      "target": "4.4",
-      "distance": 30
-    },
-    {
-      "source": "0",
-      "target": "5",
-      "distance": 50
-    },
-    {
-      "source": "5",
-      "target": "5.0",
-      "distance": 30
-    },
-    {
-      "source": "5",
-      "target": "5.1",
-      "distance": 30
-    },
-    {
-      "source": "5",
-      "target": "5.2",
-      "distance": 30
-    },
-    {
-      "source": "5",
-      "target": "5.3",
-      "distance": 30
-    },
-    {
-      "source": "5",
-      "target": "5.4",
-      "distance": 30
-    },
-    {
-      "source": "5",
-      "target": "5.5",
-      "distance": 30
-    },
-    {
-      "source": "5",
-      "target": "5.6",
-      "distance": 30
-    },
-    {
-      "source": "5",
-      "target": "5.7",
-      "distance": 30
-    },
-    {
-      "source": "5",
-      "target": "5.8",
-      "distance": 30
-    },
-    {
-      "source": "5",
-      "target": "5.9",
-      "distance": 30
-    },
-    {
-      "source": "5",
-      "target": "5.10",
-      "distance": 30
-    },
-    {
-      "source": "5",
-      "target": "5.11",
-      "distance": 30
-    },
-    {
-      "source": "0",
-      "target": "6",
-      "distance": 50
-    },
-    {
-      "source": "6",
-      "target": "6.0",
-      "distance": 30
-    },
-    {
-      "source": "6",
-      "target": "6.1",
-      "distance": 30
-    },
-    {
-      "source": "6",
-      "target": "6.2",
-      "distance": 30
-    },
-    {
-      "source": "6",
-      "target": "6.3",
-      "distance": 30
-    },
-    {
-      "source": "6",
-      "target": "6.4",
-      "distance": 30
-    },
-    {
-      "source": "6",
-      "target": "6.5",
-      "distance": 30
-    },
-    {
-      "source": "6",
-      "target": "6.6",
-      "distance": 30
-    },
-    {
-      "source": "6",
-      "target": "6.7",
-      "distance": 30
-    },
-    {
-      "source": "6",
-      "target": "6.8",
-      "distance": 30
-    },
-    {
-      "source": "6",
-      "target": "6.9",
-      "distance": 30
-    },
-    {
-      "source": "6",
-      "target": "6.10",
-      "distance": 30
-    },
-    {
-      "source": "6",
-      "target": "6.11",
-      "distance": 30
-    },
-    {
-      "source": "6",
-      "target": "6.12",
-      "distance": 30
-    },
-    {
-      "source": "6",
-      "target": "6.13",
-      "distance": 30
-    },
-    {
-      "source": "6",
-      "target": "6.14",
-      "distance": 30
-    },
-    {
-      "source": "0",
-      "target": "7",
-      "distance": 50
-    },
-    {
-      "source": "7",
-      "target": "7.0",
-      "distance": 30
-    },
-    {
-      "source": "7",
-      "target": "7.1",
-      "distance": 30
-    },
-    {
-      "source": "7",
-      "target": "7.2",
-      "distance": 30
-    },
-    {
-      "source": "7",
-      "target": "7.3",
-      "distance": 30
-    },
-    {
-      "source": "7",
-      "target": "7.4",
-      "distance": 30
-    },
-    {
-      "source": "7",
-      "target": "7.5",
-      "distance": 30
-    },
-    {
-      "source": "7",
-      "target": "7.6",
-      "distance": 30
-    },
-    {
-      "source": "7",
-      "target": "7.7",
-      "distance": 30
-    },
-    {
-      "source": "0",
-      "target": "8",
-      "distance": 50
-    },
-    {
-      "source": "8",
-      "target": "11",
-      "distance": 70
-    },
-    {
-      "source": "8",
-      "target": "8.0",
-      "distance": 30
-    },
-    {
-      "source": "8",
-      "target": "8.1",
-      "distance": 30
-    },
-    {
-      "source": "8",
-      "target": "8.2",
-      "distance": 30
-    },
-    {
-      "source": "8",
-      "target": "8.3",
-      "distance": 30
-    },
-    {
-      "source": "8",
-      "target": "8.4",
-      "distance": 30
-    },
-    {
-      "source": "8",
-      "target": "8.5",
-      "distance": 30
-    },
-    {
-      "source": "8",
-      "target": "8.6",
-      "distance": 30
-    },
-    {
-      "source": "8",
-      "target": "8.7",
-      "distance": 30
-    },
-    {
-      "source": "8",
-      "target": "8.8",
-      "distance": 30
-    },
-    {
-      "source": "0",
-      "target": "9",
-      "distance": 50
-    },
-    {
-      "source": "9",
-      "target": "11",
-      "distance": 70
-    },
-    {
-      "source": "9",
-      "target": "9.0",
-      "distance": 30
-    },
-    {
-      "source": "9",
-      "target": "9.1",
-      "distance": 30
-    },
-    {
-      "source": "9",
-      "target": "9.2",
-      "distance": 30
-    },
-    {
-      "source": "9",
-      "target": "9.3",
-      "distance": 30
-    },
-    {
-      "source": "0",
-      "target": "10",
-      "distance": 50
-    },
-    {
-      "source": "10",
-      "target": "10.0",
-      "distance": 30
-    },
-    {
-      "source": "10",
-      "target": "10.1",
-      "distance": 30
-    },
-    {
-      "source": "10",
-      "target": "10.2",
-      "distance": 30
-    },
-    {
-      "source": "10",
-      "target": "10.3",
-      "distance": 30
-    },
-    {
-      "source": "10",
-      "target": "10.4",
-      "distance": 30
-    },
-    {
-      "source": "10",
-      "target": "10.5",
-      "distance": 30
-    },
-    {
-      "source": "10",
-      "target": "10.6",
-      "distance": 30
-    },
-    {
-      "source": "10",
-      "target": "10.7",
-      "distance": 30
-    },
-    {
-      "source": "10",
-      "target": "10.8",
-      "distance": 30
-    },
-    {
-      "source": "10",
-      "target": "10.9",
-      "distance": 30
-    },
-    {
-      "source": "10",
-      "target": "10.10",
-      "distance": 30
-    },
-    {
-      "source": "10",
-      "target": "10.11",
-      "distance": 30
-    },
-    {
-      "source": "10",
-      "target": "10.12",
-      "distance": 30
-    },
-    {
-      "source": "10",
-      "target": "10.13",
-      "distance": 30
-    },
-    {
-      "source": "10",
-      "target": "10.14",
-      "distance": 30
-    },
-    {
-      "source": "0",
-      "target": "11",
-      "distance": 50
-    },
-    {
-      "source": "11",
-      "target": "11.0",
-      "distance": 30
-    },
-    {
-      "source": "11",
-      "target": "11.1",
-      "distance": 30
-    },
-    {
-      "source": "11",
-      "target": "11.2",
-      "distance": 30
-    },
-    {
-      "source": "11",
-      "target": "11.3",
-      "distance": 30
-    },
-    {
-      "source": "11",
-      "target": "11.4",
-      "distance": 30
-    },
-    {
-      "source": "11",
-      "target": "11.5",
-      "distance": 30
-    },
-    {
-      "source": "11",
-      "target": "11.6",
-      "distance": 30
-    },
-    {
-      "source": "11",
-      "target": "11.7",
-      "distance": 30
-    },
-    {
-      "source": "11",
-      "target": "11.8",
-      "distance": 30
-    },
-    {
-      "source": "11",
-      "target": "11.9",
-      "distance": 30
-    },
-    {
-      "source": "11",
-      "target": "11.10",
-      "distance": 30
-    },
-    {
-      "source": "11",
-      "target": "11.11",
-      "distance": 30
-    },
-    {
-      "source": "11",
-      "target": "11.12",
-      "distance": 30
-    },
-    {
-      "source": "11",
-      "target": "11.13",
-      "distance": 30
-    },
-    {
-      "source": "11",
-      "target": "11.14",
-      "distance": 30
-    },
-    {
-      "source": "0",
-      "target": "12",
-      "distance": 50
-    },
-    {
-      "source": "12",
-      "target": "6",
-      "distance": 70
-    },
-    {
-      "source": "12",
-      "target": "12.0",
-      "distance": 30
-    },
-    {
-      "source": "12",
-      "target": "12.1",
-      "distance": 30
-    },
-    {
-      "source": "12",
-      "target": "12.2",
-      "distance": 30
-    },
-    {
-      "source": "12",
-      "target": "12.3",
-      "distance": 30
-    },
-    {
-      "source": "12",
-      "target": "12.4",
-      "distance": 30
-    },
-    {
-      "source": "12",
-      "target": "12.5",
-      "distance": 30
-    },
-    {
-      "source": "12",
-      "target": "12.6",
-      "distance": 30
-    },
-    {
-      "source": "0",
-      "target": "13",
-      "distance": 50
-    },
-    {
-      "source": "13",
-      "target": "13.0",
-      "distance": 30
-    },
-    {
-      "source": "13",
-      "target": "13.1",
-      "distance": 30
-    },
-    {
-      "source": "13",
-      "target": "13.2",
-      "distance": 30
-    },
-    {
-      "source": "13",
-      "target": "13.3",
-      "distance": 30
-    },
-    {
-      "source": "13",
-      "target": "13.4",
-      "distance": 30
-    },
-    {
-      "source": "13",
-      "target": "13.5",
-      "distance": 30
-    },
-    {
-      "source": "13",
-      "target": "13.6",
-      "distance": 30
-    },
-    {
-      "source": "13",
-      "target": "13.7",
-      "distance": 30
-    },
-    {
-      "source": "13",
-      "target": "13.8",
-      "distance": 30
-    },
-    {
-      "source": "13",
-      "target": "13.9",
-      "distance": 30
-    },
-    {
-      "source": "13",
-      "target": "13.10",
-      "distance": 30
-    }
-  ])
-  
+  const [nodes, setNodes] = useState([])
+  const [links, setLinks] = useState([])
+  const [charts, setCharts] = useState({
+    wordCloud:[],
+    langPie:[],
+    povPie:[],
+    topicsBar:[],
+    avgSent:0,
+    uniqueUsers:0,
+    rewtweetCount:0,
+    tweetCount:0,
+  })  
+  const [startDate, changeStartDate] = useState(null);
+  const [endDate, changeEndDate] = useState(null);
+  const [textBox, setTextBox] = useState({})
+  const [selects,setSelect] = useState({
+      topics:[],
+      pov:[],
+      lang:[]
+  })
+  const [verified, setVerified] = React.useState(false);
+  const [sentiment, setSentiment] = React.useState([-1, 1]);
+
+  const handleChangeSent = (event, newValue) => {
+    setSentiment(newValue);
+  };
+
+  const handleChangeVer = (event) => {
+      setVerified(event.target.checked);
+  };
+
+  const loadNetwork = () => {
+
+    axios({
+        method:'post',
+        url:`${process.env.REACT_APP_API_URL}/api/network`,
+        data:{
+            startDate:startDate,
+            endDate:endDate,
+            search:textBox.search,
+            topics:selects.topics,
+            lang:selects.lang,
+            pov:selects.pov,
+            verified:verified,
+            sentStart:sentiment[0],
+            sentEnd:sentiment[1],
+        }
+    }).then(response => {
+      setNodes(response.data.nodes)
+      setLinks(response.data.links)
+    }).catch(error => {
+        console.log('error',error)
+    })
+  }
+
+  const loadData = () => {
+
+    axios({
+        method:'post',
+        url:`${process.env.REACT_APP_API_URL}/api/dashboard`,
+        data:{
+            startDate:startDate,
+            endDate:endDate,
+            search:textBox.search,
+            topics:selects.topics,
+            lang:selects.lang,
+            pov:selects.pov,
+            verified:verified,
+            sentStart:sentiment[0],
+            sentEnd:sentiment[1],
+        }
+    }).then(response => {
+      console.log(response)
+      setCharts({
+        wordCloud:response.data.wordCloud,
+        langPie:response.data.langPie,
+        povPie:response.data.povPie,
+        topicsBar:response.data.topicsBar,
+        avgSent:response.data.avgSent,
+        uniqueUsers:response.data.uniqueUsers,
+        rewtweetCount:response.data.rewtweetCount,
+        tweetCount:response.data.tweetCount,
+      })
+    }).catch(error => {
+        console.log('error',error)
+    })
+  }
+
+  useEffect(() => {
+      loadData(true)
+      loadNetwork()
+  }, [startDate,endDate,selects,sentiment,verified]);
 
   return (
     <Grid container spacing={3} className={classes.root}>
-      <Grid item xs={6}>
+      <Grid item xs={12}>
+        <Card className={classes.card} variant="outlined">
+            <CardContent>
+                <Grid container spacing={3}>
+                    <Grid item lg={3} xs={6}>
+                        <TextField
+                            className={classes.textBox}
+                            id="search" 
+                            label="Search" 
+                            onChange={(event) => onTextChange(event,'search',setTextBox) }
+                            onKeyPress={(ev) => {
+                                if (ev.key === 'Enter') {
+                                    loadData(true)
+                                    ev.preventDefault();
+                                }
+                            }}
+                            InputProps={{
+                                endAdornment: (
+                                <InputAdornment>
+                                    <IconButton onClick={() => loadData(true)}>
+                                        <Search />
+                                    </IconButton>
+                                </InputAdornment>
+                                )
+                            }}
+                        />
+                    </Grid>
+                    <DateFilters
+                        startDate={startDate}
+                        endDate={endDate}
+                        changeStartDate={changeStartDate}
+                        changeEndDate={changeEndDate}
+                        setRows={setRows}
+                    />
+                    <Grid item lg={1} xs={4}>
+                        <FormControl row style={{marginTop:'25px'}}>
+                            <FormControlLabel
+                                control={<Switch checked={verified} onChange={handleChangeVer} name="verified" color="primary"/>}
+                                label="Verified"
+                            />
+                        </FormControl>
+                    </Grid>
+                    <Grid item lg={2} xs={4}>
+                        <InputLabel>Sentiment Range</InputLabel>
+                        <Slider
+                            style={{marginTop:'25px'}}
+                            value={sentiment}
+                            onChange={handleChangeSent}
+                            valueLabelDisplay="auto"
+                            aria-labelledby="range-slider"
+                            min={-1}
+                            max={1}
+                            step={.05}
+                        />
+                    </Grid>
+                    <Grid item lg={4} xs={6}>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel>Topics</InputLabel>
+                            <Select
+                                multiple
+                                id="topics"
+                                name="topics"
+                                onChange={handleSelect(setSelect)}
+                                value={selects.topics}
+                            >
+                                <MenuItem value={'relief measures'}>Relief Measures</MenuItem>
+                                <MenuItem value={'news updates'}>News Updates</MenuItem>
+                                <MenuItem value={'donation'}>Donation</MenuItem>
+                                <MenuItem value={'compensation'}>Compensation</MenuItem>
+                                <MenuItem value={'government'}>Government</MenuItem>
+                                <MenuItem value={'sympathy'}>Sympathy</MenuItem>
+                                <MenuItem value={'hope'}>Hope</MenuItem>
+                                <MenuItem value={'evacuation'}>Evacuation</MenuItem>
+                                <MenuItem value={'job'}>Job</MenuItem>
+                                <MenuItem value={'petition'}>Petition</MenuItem>
+                                <MenuItem value={'utilities'}>Utilities</MenuItem>
+                                <MenuItem value={'power supply'}>Power Supply</MenuItem>
+                                <MenuItem value={'poverty'}>Poverty</MenuItem>
+                                <MenuItem value={'medical assistance'}>Medical Assistance</MenuItem>
+                                <MenuItem value={'volunteers'}>Volunteers</MenuItem>
+                                <MenuItem value={'ecosystem'}>Ecosystem</MenuItem>
+                                <MenuItem value={'housing'}>Housing</MenuItem>
+                                <MenuItem value={'farm'}>Farm</MenuItem>
+                                <MenuItem value={'corruption'}>Corruption</MenuItem>
+                                <MenuItem value={'cellular network'}>Cellular Network</MenuItem>
+                                <MenuItem value={'coronavirus'}>Coronavirus</MenuItem>
+                                <MenuItem value={'food supply'}>Food Supply</MenuItem>
+                                <MenuItem value={'criticism'}>Criticism</MenuItem>
+                                <MenuItem value={'water supply'}>Water Supply</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item lg={4} xs={6}>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel>POV</InputLabel>
+                            <Select
+                                id="pov"
+                                name="pov"
+                                onChange={handleSelect(setSelect)}
+                                value={selects.pov}
+                            >
+                                <MenuItem value={'None'}>None</MenuItem>
+                                <MenuItem value={'first'}>First Person</MenuItem>
+                                <MenuItem value={'second'}>Second Person</MenuItem>
+                                <MenuItem value={'third'}>Third Person</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item lg={4} xs={6}>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel>Language</InputLabel>
+                            <Select
+                                id="lang"
+                                name="lang"
+                                onChange={handleSelect(setSelect)}
+                                value={selects.lang}
+                            >
+                                <MenuItem value={'en'}>English</MenuItem>
+                                <MenuItem value={'hi'}>Hindi</MenuItem>
+                                <MenuItem value={'bn'}>Bengali</MenuItem>
+                                <MenuItem value={'es'}>Spanish</MenuItem>
+                                <MenuItem value={'or'}>Oriya</MenuItem>
+                                <MenuItem value={'fr'}>French</MenuItem>
+                                <MenuItem value={'in'}>Indonesian</MenuItem>
+                                <MenuItem value={'ja'}>Japanese</MenuItem>
+                                <MenuItem value={'de'}>German</MenuItem>
+                                <MenuItem value={'und'}>Undefined</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                </Grid>
+              </CardContent>
+          </Card>
+      </Grid>
+      <Grid item xs={3}>
+        <Card>
+            <CardContent >
+                <b>Number of Tweets: </b>{formater.format(charts.tweetCount)}
+            </CardContent>
+          </Card>
+      </Grid>
+      <Grid item xs={3}>
+        <Card>
+            <CardContent>
+              <b>Number of Retweets: </b>{formater.format(charts.rewtweetCount)}
+            </CardContent>
+          </Card>
+      </Grid>
+      <Grid item xs={3}>
+        <Card>
+            <CardContent >
+              <b>Unique Users: </b>{formater.format(charts.uniqueUsers)}
+            </CardContent>
+          </Card>
+      </Grid>
+      <Grid item xs={3}>
+        <Card>
+            <CardContent>
+              <b>Sentiment: </b>{charts.avgSent.toFixed(3)}
+            </CardContent>
+          </Card>
+      </Grid>
+      <Grid item xs={12}>
         <Card>
           <CardContent style={{height:500}}>
             <ResponsiveNetwork
               nodes={nodes}
               links={links}
-              margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+              margin={{ top: 100, right: 0, bottom: 10, left: 0 }}
               repulsivity={6}
               iterations={60}
               nodeColor={function(t){return t.color}}
@@ -1697,13 +342,12 @@ function Dashboard() {
               motionStiffness={160}
               motionDamping={12}
               tooltip={node => {
-                console.log(node)
                 return (
                     <div>
                         <div>
                             <strong style={{ color: node.color }}>ID: {node.id}</strong>
                             <br />
-                            Depth: {node.depth}
+                            Name: {node.name}
                             <br />
                             Radius: {node.radius}
                         </div>
@@ -1715,7 +359,142 @@ function Dashboard() {
         </Card>
       </Grid>
       <Grid item xs={6}>
-        Test
+        <Card>
+            <CardContent style={{height:'500px'}}>
+                <ReactWordcloud 
+                  words={charts.wordCloud}
+                  options={{fontSizes:[10,80]}}
+                />
+            </CardContent>
+          </Card>
+      </Grid>
+      <Grid item xs={6}>
+        <Card>
+          <CardContent style={{height:'500px'}}>
+            <ResponsivePie
+                data={charts.povPie}
+                margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+                innerRadius={0.5}
+                padAngle={0.7}
+                cornerRadius={3}
+                colors={{ scheme: 'nivo' }}
+                borderWidth={1}
+                borderColor={{ from: 'color', modifiers: [ [ 'darker', 0.2 ] ] }}
+                radialLabelsSkipAngle={10}
+                radialLabelsTextXOffset={6}
+                radialLabelsTextColor="#333333"
+                radialLabelsLinkOffset={0}
+                radialLabelsLinkDiagonalLength={16}
+                radialLabelsLinkHorizontalLength={24}
+                radialLabelsLinkStrokeWidth={1}
+                radialLabelsLinkColor={{ from: 'color' }}
+                slicesLabelsSkipAngle={10}
+                slicesLabelsTextColor="#333333"
+                animate={true}
+                motionStiffness={90}
+                motionDamping={15}
+                legends={[
+                    {
+                        anchor: 'bottom',
+                        direction: 'row',
+                        translateY: 56,
+                        itemWidth: 100,
+                        itemHeight: 18,
+                        itemTextColor: '#999',
+                        symbolSize: 18,
+                        symbolShape: 'circle',
+                        effects: [
+                            {
+                                on: 'hover',
+                                style: {
+                                    itemTextColor: '#000'
+                                }
+                            }
+                        ]
+                    }
+                ]}
+              />
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={6}>
+        <Card>
+          <CardContent style={{height:'500px'}}>
+            <ResponsivePie
+                data={charts.langPie}
+                margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+                innerRadius={0.5}
+                padAngle={0.7}
+                cornerRadius={3}
+                colors={{ scheme: 'nivo' }}
+                borderWidth={1}
+                borderColor={{ from: 'color', modifiers: [ [ 'darker', 0.2 ] ] }}
+                radialLabelsSkipAngle={10}
+                radialLabelsTextXOffset={6}
+                radialLabelsTextColor="#333333"
+                radialLabelsLinkOffset={0}
+                radialLabelsLinkDiagonalLength={16}
+                radialLabelsLinkHorizontalLength={24}
+                radialLabelsLinkStrokeWidth={1}
+                radialLabelsLinkColor={{ from: 'color' }}
+                slicesLabelsSkipAngle={10}
+                slicesLabelsTextColor="#333333"
+                animate={true}
+                motionStiffness={90}
+                motionDamping={15}
+                legends={[
+                    {
+                        anchor: 'bottom',
+                        direction: 'row',
+                        translateY: 56,
+                        itemWidth: 100,
+                        itemHeight: 18,
+                        itemTextColor: '#999',
+                        symbolSize: 18,
+                        symbolShape: 'circle',
+                        effects: [
+                            {
+                                on: 'hover',
+                                style: {
+                                    itemTextColor: '#000'
+                                }
+                            }
+                        ]
+                    }
+                ]}
+              />
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={6}>
+        <Card>
+            <CardContent style={{height:'500px'}}>
+              <ResponsiveBar
+                data={charts.topicsBar}
+                keys={['value']}
+                indexBy="topic"
+                margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+                padding={0.3}
+                colors={{ scheme: 'accent' }}
+                axisBottom={{
+                  tickSize: 5,
+                  tickPadding: 5,
+                  tickRotation: 0,
+                  legend: 'topics',
+                  legendPosition: 'middle',
+                  legendOffset: 32
+              }}
+              axisLeft={{
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 0,
+                legend: 'Tweets',
+                legendPosition: 'middle',
+                legendOffset: -50
+            }}
+              />
+            </CardContent>
+          </Card>
       </Grid>
     </Grid>
   );

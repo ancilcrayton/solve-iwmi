@@ -7,7 +7,8 @@
  * file that was distributed with this source code.
  */
 import React from 'react'
-import { Annotation, useAnnotations } from '@nivo/annotations'
+import Annotation from '../../annotations/src/Annotation'
+import { useAnnotations } from '../../annotations/src/hooks'
 
 const BarAnnotations = ({ bars, annotations, animate, motionStiffness, motionDamping }) => {
     const boundAnnotations = useAnnotations({
@@ -33,8 +34,8 @@ const BarAnnotations = ({ bars, annotations, animate, motionStiffness, motionDam
         <Annotation
             key={i}
             {...annotation}
-            containerWidth={innerWidth}
-            containerHeight={innerHeight}
+            containerWidth={window.innerWidth}
+            containerHeight={window.innerHeight}
             animate={animate}
             motionStiffness={motionStiffness}
             motionDamping={motionDamping}

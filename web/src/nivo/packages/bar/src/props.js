@@ -13,8 +13,8 @@ import {
     colorPropertyAccessorPropType,
     inheritedColorPropType,
 } from '@nivo/colors'
-import { axisPropType } from '@nivo/axes'
-import { LegendPropShape } from '@nivo/legends'
+import { axisPropType } from '../../axes/src'
+import { LegendPropShape } from '../../legends/src'
 import BarItem from './BarItem'
 
 export const BarPropTypes = {
