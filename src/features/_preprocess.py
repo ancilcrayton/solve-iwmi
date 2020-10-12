@@ -42,7 +42,19 @@ def translate_func(x, text, lang):
 
 
 def preprocessDataFrame(df):
-    """TODO: DOCS MISSING"""
+    """
+    Function to run basic preprocessing pipeline on all tweets to generate "full_text_processed":
+    - Translating tweets to English
+    - Removing Stopwords & Lemmatization
+    - Removing URLs and reserved words
+    - Lowercasing & punctuation removal
+
+    Args:
+        df - DataFrame with original tweets
+
+    Returns:
+        df - DataFrame with processed tweets
+    """
     df['full_text_processed'] = df.apply(
         lambda x: translate_func(x, 'full_text', 'lang'),
         axis=1

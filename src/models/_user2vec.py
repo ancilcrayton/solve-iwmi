@@ -9,7 +9,9 @@ tqdm.pandas()
 
 
 class User2Vec(Doc2Vec):
-    """TODO: documentation"""
+    """
+    Generates vectors for each user in the dataset
+    """
     def __init__(self, vector_size, min_count, epochs, **kwargs):
 
         super().__init__(

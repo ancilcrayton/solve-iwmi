@@ -26,7 +26,9 @@ def viz_preprocess_data(
     tweet_count_clip_value=10,
     followers_clip_value=50000
 ):
-    """Prepares data to be fed into the dashboard."""
+    """
+    Prepares data to be fed into the dashboard.
+    """
 
     # Load data
     df_edges = pd.read_csv(edges_path).sample(sample_n_edges)
@@ -145,7 +147,10 @@ def viz_preprocess_data(
 
 
 def make_dashboard_app(cy_nodes, cy_edges, node_size=20, scale_multiplier=20):
-    """Sets up the Dash object"""
+    """
+    Sets up the Dash object
+    """
+    
     # import the css template, and pass the css template into dash
     external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
     app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
