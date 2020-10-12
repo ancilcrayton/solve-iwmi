@@ -1,8 +1,9 @@
-.. _imbalanced-learn: https://imbalanced-learn.readthedocs.io/en/stable/
 
-============
-Introduction
-============
+.. _user_guide:
+
+==========
+User Guide
+==========
 
 API
 ---

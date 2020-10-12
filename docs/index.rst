@@ -37,7 +37,6 @@ Contents
 
 .. toctree::
    :maxdepth: 2
-   :hidden:
    :caption: Getting Started
 
    install
@@ -47,15 +46,16 @@ Contents
    :maxdepth: 2
    :caption: Documentation
    
-   commands
    user-guide
+   commands
    api
 
 .. toctree::
    :maxdepth: 2
    :caption: Technical Report
+   :glob:
 
-   technical_report/introduction
+   technical_report/*
 
 .. toctree::
    :maxdepth: 2

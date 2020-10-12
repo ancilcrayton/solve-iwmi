@@ -1,6 +1,12 @@
 # Amphan: Analyzing Experiences of Extreme Weather Events using Social Media Discourse
 
-## DSSG Solve Team: Ancil Crayton, João Fonseca, Kanav Mehra, Jared Ross, Marcelo Sandoval-Castañeda
+**DSSG Solve Team:**
+- Ancil Crayton
+- João Fonseca
+- Kanav Mehra
+- Jared Ross
+- Marcelo Sandoval-Castañeda
+
 ## Project Partner: International Water Management Institute (IWMI)
 
 ### Background 
@@ -61,7 +67,7 @@ Project Organization
 
 Installation and Setup
 --------
-A Python distribution of version 3.7 or higher is required to run this project. Before you begin any of the steps mentioned below, it is important you make sure your `configs.yaml` file is properly configured for your needs. More information on the possible configurations will be provided further down the road. 
+A Python distribution of version 3.7 or higher is required to run this project. Before you begin any of the steps mentioned below, it is important you make sure your `configs.yaml` file is properly configured for your needs. More information on the possible configurations is provided in the project's `readthedocs` page. 
 
 ### Basic Installation
 All `make` scripts/commands can be configured through the `configs.yaml` file. The following commands should allow you to setup this project with minimal effort:

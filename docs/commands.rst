@@ -3,8 +3,18 @@ Commands
 
 The Makefile contains the central entry points for common tasks related to this project.
 
-Syncing data to S3
-^^^^^^^^^^^^^^^^^^
+* `create_environment`: Set up python interpreter environment 
+* `requirements`: Install Python Dependencies 
+* `data_pull`: Pull raw data 
+* `create_network`: Create Docker Network 
+* `etl`: Transform and Load data into the Elastic Search server
+* `database`: Create and/or Open local Elastic Search Server 
+* `close_database`: Close local Elastic Search Server 
+* `load_es`: Load preprocessed data into an Elastic Search server 
 
-* `make sync_data_to_s3` will use `aws s3 sync` to recursively sync files in `data/` up to `s3://[OPTIONAL] your-bucket-for-syncing-data (do not include 's3://')/data/`.
-* `make sync_data_from_s3` will use `aws s3 sync` to recursively sync files from `s3://[OPTIONAL] your-bucket-for-syncing-data (do not include 's3://')/data/` to `data/`.
+Utilities
+^^^^^^^^^
+
+* `test_environment`: Test python environment is setup correctly 
+* `lint`: Lint using flake8 
+* `clean`: Delete all compiled Python files 

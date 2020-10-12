@@ -177,6 +177,11 @@ html_theme_options = {
     'master_doc': False,
     'nav_links': [
         {
+            'href': 'https://www.iwmi.cgiar.org/',
+            'internal': False,
+            'title': 'IWMI'
+        },
+        {
             'href': 'https://www.solveforgood.org/',
             'internal': False,
             'title': 'DSSG Solve',
