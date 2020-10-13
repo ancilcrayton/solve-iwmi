@@ -3,8 +3,6 @@ Commands
 
 The Makefile contains the central entry points for common tasks related to this project.
 
-* `create_environment`: Set up python interpreter environment 
-* `requirements`: Install Python Dependencies 
 * `data_pull`: Pull raw data 
 * `create_network`: Create Docker Network 
 * `etl`: Transform and Load data into the Elastic Search server
@@ -15,6 +13,8 @@ The Makefile contains the central entry points for common tasks related to this 
 Utilities
 ^^^^^^^^^
 
+* `create_environment`: Set up python interpreter environment 
+* `requirements`: Install Python Dependencies 
 * `test_environment`: Test python environment is setup correctly 
 * `lint`: Lint using flake8 
 * `clean`: Delete all compiled Python files 
