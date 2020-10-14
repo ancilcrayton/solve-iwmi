@@ -14,16 +14,20 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 def translate_tweet(text, lang):
     """
-    Translate a block of text (this function is the main reason preprocessing
-    runs so slow)
+    Translate a block of text (this function can be time consuming).
 
-    Args:
-        text - text that you want to translate6
-        lang - langauge of original text
+    Parameters
+    ----------
+    text : str
+        Text to be translated.
+    lang : str
+        Langauge of original text
 
 
-    Returns:
-        trans - translated text
+    Returns
+    -------
+    trans : str
+        Text translated to English.
     """
     trans = Translator()
     return trans.translate(text).text
@@ -31,8 +35,22 @@ def translate_tweet(text, lang):
 
 def translate_func(x, text, lang):
     """
-    Function to use apply on all rows of the dataframe to translate text.
-    Performs better then itterrow
+    Function to use the .apply method on all rows of a dataframe to translate
+    text. Performs better then itterrow.
+
+    Parameters
+    ----------
+    x : Series or dict
+        Pandas DataFrame row.
+    text : str
+        Name of the key containing the text to be translated.
+    lang : str
+        Name of the key containing the language of the text.
+
+    Returns
+    -------
+    process : str
+        Text translated into English.
     """
     if x[lang] != 'en':
         process = translate_tweet(x[text], x[lang])
@@ -43,17 +61,19 @@ def translate_func(x, text, lang):
 
 def preprocessDataFrame(df):
     """
-    Function to run basic preprocessing pipeline on all tweets to generate "full_text_processed":
-    - Translating tweets to English
-    - Removing Stopwords & Lemmatization
-    - Removing URLs and reserved words
-    - Lowercasing & punctuation removal
+    Function to run the preprocessing pipeline on all tweets to generate
+    the feature "full_text_processed": Translating tweets to English, removing
+    stopwords & lemmatization, removing URLs and reserved words, lowercasing &
+    punctuation removal and VADER sentiment analysis.
 
-    Args:
-        df - DataFrame with original tweets
+    Parameters
+    ----------
+    df : DataFrame
+        Transformed DataFrame with original tweets
 
     Returns:
-        df - DataFrame with processed tweets
+    df : DataFrame
+        DataFrame with processed tweets
     """
     df['full_text_processed'] = df.apply(
         lambda x: translate_func(x, 'full_text', 'lang'),

@@ -1,5 +1,5 @@
 """
-Functions to visualize the user network
+Functions developed to visualize the user network.
 """
 from ._network_viz import (
     viz_preprocess_data,

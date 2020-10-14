@@ -1,5 +1,5 @@
 """
-Functions to run the preprocessing pipleine
+Functions to run preprocessing tasks and basic feature extraction.
 """
 from ._preprocess import (
     translate_tweet,

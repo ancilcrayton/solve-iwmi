@@ -23,14 +23,19 @@ def doc_generator(
     """
     Iterate over the dataframe and yield documents to upload
 
-    Args:
-        df - dataframe with the data
-        id_col - column to be used for the id in the database
-        filterKeys - a function that can be defined to return what you want
-            from the pandas series
+    Parameters
+    ----------
+    df : DataFrame
+        Pandas DataFrame containing the transformed Twitter data.
+    id_col : str
+        Column to be used for the id in the database.
+    filterKeys : function
+        Function to return what you want from the pandas series.
 
-    Yields:
-        dictionaries for the elasticsearch to insert into the database in bulk
+    Returns
+    -------
+    documents : generator
+        Generator with dictionaries to insert into the database in bulk.
     """
     df_iter = df.iterrows()
     for i, document in df_iter:
@@ -47,14 +52,21 @@ def load_es(
     verbose=False
 ):
     """
-    Loads the dataframe into the database
+    Loads a dataframe into the Elastic Search database.
 
-    Args:
-        df_merged - merged dataframe of tweets and users
+    Parameters
+    ----------
+    df_merged : DataFrame
+        Merged dataframe of tweets and users.
+    ip_address : str
+        Elastic Search database's ip address.
 
-    Yields:
-        A tuple with summary information - number of successfully executed
-        actions and list of errors
+    Returns
+    -------
+    actions : int
+        Number of successully executed actions
+    errors : list
+        List of errors
     """
 
     es = Elasticsearch([ip_address])  # no args, connect to localhost:9200
