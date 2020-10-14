@@ -21,7 +21,9 @@ As a basic example, the function `data.pull_tweets` may be imported within a pyt
 
 Data ETL
 --------
-If your raw data file is too large to be loaded at once into Elastic Search, you can split it into smaller chunks:
+
+If your raw data file is too large to be loaded at once into Elastic Search, you can split it into
+smaller chunks:
 
 .. code:: bash
 
@@ -37,7 +39,21 @@ If your raw data file is too large to be loaded at once into Elastic Search, you
 Accessing Analyses, Test scripts and Results
 --------------------------------------------
 
-The entire analysis process is available in the project's repo under the directory `notebooks`.
+The entire analysis process is available in the project's repo under the directory `notebooks`. For
+easier organization, the notebooks follow a specific naming convention:
 
-**<TODO: Description of the ordering here>**
+.. code:: bash
+ 
+   <CHAPTER_NUMBER>.<SUBCHAPTER>-<AUTHORS_INITIALS>-<NOTEBOOK_DESCRIPTION>.ipynb
 
+Each chapter refers to a specific step of the work:
+
+===========  =============
+  Chapter     Description
+===========  =============
+     1       Data pulling, ETL and data preprocessing
+     2       Intial exploratory data analyses
+     3       Feature extraction
+     4       Classification (mostly focused on zero-shot classification methods for topic extraction)
+     5       Analyses addressing each research question
+===========  =============

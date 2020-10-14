@@ -9,12 +9,22 @@ About
 DSSG Solve
 ----------------------------
 
-Info about DSSG Solve goes here.
+Solve for Good is a platform for social good organizations to describe and submit problems that need
+data intensive help, and for volunteers to help solve those problems. Once the projects are
+submitted by the organization, they go through a scoping process (done by scoping volunteers and
+guided by our Data Science Scoping Process). Once a project scope is finalized and reviewed, it
+becomes available for data science volunteers to start working on. The finished work is reviewed by
+a QA team consisting of volunteers and staff of the organization that submitted the project and
+given back to the organization as well as shared publicly on github.
 
 Authors
 ----------------------------
 
-Authors' info goes here.
+- Ancil Crayton
+- `João Fonseca <https://joaopfonseca.github.io>`_
+- Kanav Mehra
+- Jared Ross
+- Marcelo Sandoval-Castañeda
 
 Citing solve-iwmi
 ----------------------------

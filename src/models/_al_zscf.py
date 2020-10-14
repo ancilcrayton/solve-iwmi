@@ -53,11 +53,11 @@ def data_selection(probabs, leftover_ids, increment, rng, selection_strategy):
 
 
 class ALZeroShotWrapper(ClassifierMixin, BaseEstimator):
+    """Active Learning with Zero-Shot classification"""
     def __init__(
         self,
         classifier,
         max_iter=1000,
-        split_method=None,
         selection_strategy='entropy',
         n_initial=100,
         increment=50,
@@ -67,9 +67,44 @@ class ALZeroShotWrapper(ClassifierMixin, BaseEstimator):
         random_state=None,
         verbose=None
     ):
+        """
+        Performs Active Learning using Zero Shot classification for
+        obtaining a pseudo-ground truth. This method attempts to fit to the
+        ZSCF's predictions and emulate its behavior in a more simplistic way.
+        This might be a good alternative for situations where the computational
+        power is limited.
+
+        Parameters
+        ----------
+        classifier : sklearn obj or similar
+            Classifier to be trained.
+        max_iter : int, default=1000
+            Maximum number of iterations
+        selection_strategy : str, default='entropy'
+            Strategy used to compute uncertainty. Can be either one of
+            'entropy', 'margin sampling' or 'random'.
+        n_initial : int, default=100
+            Number of initial training points.
+        increment : int, default=50
+            Number of additional instances per iteration.
+        save_classifiers : bool, default=False
+           If True, creates a list of classifiers (one per iteration) in the
+           attribute `self.classifiers_`.
+        auto_load : bool, default=True
+            Wether to use the best found classifier as default classification
+            method. If True, the trained classifier object is found at
+            `self.classifier_`.
+        evaluation_metric : function or NoneType, default=None
+            Evaluation metric used to evaluate the classification outputs on
+            each iteration. If `None`, Overall Accuracy is used.
+        random_state : int or RandomState, default=None
+            Control the random number generator used. Setting a value to this
+            parameter should allow the experiment to become reproducible.
+        verbose : int, bool or NoneType, default=None
+            Controls the verbosity during the training process.
+        """
         self.classifier = classifier
         self.max_iter = max_iter
-        self.split_method = split_method
         self.selection_strategy = selection_strategy
         self.n_initial = n_initial
         self.increment = increment

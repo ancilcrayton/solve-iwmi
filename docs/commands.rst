@@ -1,20 +1,21 @@
 Commands
 ========
 
-The Makefile contains the central entry points for common tasks related to this project.
+The Makefile script contains the central entry points for common tasks related to this project.
 
-* `data_pull`: Pull raw data 
-* `create_network`: Create Docker Network 
-* `etl`: Transform and Load data into the Elastic Search server
-* `database`: Create and/or Open local Elastic Search Server 
-* `close_database`: Close local Elastic Search Server 
-* `load_es`: Load preprocessed data into an Elastic Search server 
-
-Utilities
-^^^^^^^^^
-
-* `create_environment`: Set up python interpreter environment 
-* `requirements`: Install Python Dependencies 
-* `test_environment`: Test python environment is setup correctly 
-* `lint`: Lint using flake8 
-* `clean`: Delete all compiled Python files 
+===========  ==========================  =========================================================
+ Topic        `make` Command              Description
+===========  ==========================  =========================================================
+ Data pull    ``data_pull``               Pull raw data from Twitter 
+ Database     ``create_network``          Create Docker Network
+ Database     ``database``                Create and/or open local Elastic Search server 
+ Database     ``close_database``          Close local Elastic Search server 
+ ETL          ``etl``                     Transform and load data into the Elastic Search server
+ ETL          ``load_es``                 Load preprocessed data into an Elastic Search server 
+ Data Viz     ``visualize``               Run user network visualization 
+ Utilities    ``create_environment``      Set up python interpreter environment 
+ Utilities    ``requirements``            Install Python dependencies 
+ Utilities    ``test_environment``        Test Python environment is setup correctly 
+ Utilities    ``lint``                    Lint using flake8 
+ Utilities    ``clean``                   Delete all compiled Python files 
+===========  ==========================  =========================================================

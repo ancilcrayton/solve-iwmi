@@ -51,6 +51,9 @@ database:
 close_database:
 	docker kill solve-iwmi_kibana_1 solve-iwmi_elasticsearch_1
 
+## Run user network visualization
+visualize:
+	$(PYTHON_INTERPRETER) src/visualization/visualize.py 
 
 
 ## Delete all compiled Python files

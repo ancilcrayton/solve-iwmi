@@ -17,16 +17,22 @@ def merge_dataframes(
     verbose=False
 ):
     """
-    Merges users and tweets dataframe for input into elasticsearch
+    Merges users and tweets dataframe to input into elasticsearch.
 
-    Args:
-        df_users - dataframe with all users from the data
-        df_tweets - dataframe with all tweets pulled
+    Parameters
+    ----------
+    df_users : DataFrame
+        Dataframe with all users from the data.
+    df_tweets : DataFrame
+        Dataframe with all tweets pulled.
+    verbose : int or bool, default=False
+        Controls the verbosity when pulling data.
 
-
-    Yields:
-        df_merged - dataframe with the dataframes joined on user_id so every
-            row has the tweet and the user information
+    Returns
+    -------
+    df_merged : DataFrame
+        Dataframe with the dataframes joined on user_id so every
+        row has the tweet and the user information.
     """
 
     logger = logging.getLogger(__name__)
@@ -57,12 +63,18 @@ def transform(json_path, verbose=False):
     Converts a raw .json file containing Tweets' data into a clean(er)
     dataset.
 
-    Args:
-        json_path - path to json file containing the pertinent data.
+    Parameters
+    ----------
+    json_path : str
+        Path to json file containing the pertinent data.
+    verbose : int or bool, default=False
+        Controls the verbosity when pulling data.
 
-    Yields:
-        df_merged - dataframe with the dataframes joined on user_id so every
-            row has the tweet and the user information
+    Returns
+    -------
+    df_merged : DataFrame
+        Dataframe with the dataframes joined on user_id so every
+        row has the tweet and the user information.
     """
 
     logger = logging.getLogger(__name__)

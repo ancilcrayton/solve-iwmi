@@ -5,11 +5,20 @@ def query_es(client, body=None, index_query='*', scroll='2s'):
     """
     Queries an Elastic Search database to get all the results of a query.
 
-    Params:
-        - `client`: elasticsearch.Elasticsearch object.
-        - `body`: The search definition using the Query DSL.
-        - `index_query`: Search over indices matching passed index query.
-        - `scroll`: Length of time to keep search context
+    Parameters
+    ----------
+    client : elasticsearch.Elasticsearch
+    body : dict or NoneType, default=None
+        The search definition using the Query DSL.
+    index_query : str, default='*'
+        Search over indices matching passed index query.
+    scroll : str, default='2s'
+        Length of time to keep search context.
+
+    Returns
+    -------
+    df : DataFrame
+        Pandas DataFrame with data matching the passed query.
     """
     data = []
 

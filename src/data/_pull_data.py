@@ -5,9 +5,6 @@ The data is stored "as is". The remaining ETL steps can be found
 in separate scripts.
 """
 
-# Author: João Fonseca <jpmrfonseca@gmail.com>
-# License: MIT
-
 import logging
 import json
 from searchtweets import (
@@ -40,8 +37,38 @@ def pull_tweets(
     The data received from the API is stored in its original form (JSON)
     without performing any type of preprocessing.
 
-    :parameter query: TODO
-    :return: None
+    Parameters
+    ----------
+    query : str
+        Query passed to the Twitter API to fecth Tweets.
+    from_date : str or None
+        Date format as specified by `convert_utc_time` for the starting time
+        of your search.
+    to_date : str or None
+        Date format as specified by `convert_utc_time` for the end time of
+        your search.
+    save_path : str
+        Path where the raw data will be stored.
+    credentials_path : str
+        Path for the yaml file with the Twitter API credentials.
+    yaml_key : str
+        Key within the yaml file containing the Twitter API credentials to be
+        used.
+    file_name : str or None, default=None
+        Name of the json file saved containing the data dump. If None, the
+        named will be assigned as a function of `query`, `from_date` and
+        `to_date`.
+    results_per_call : int, default=500
+        Number of Tweets returned per call.
+    max_results : int, default=3000
+        Maximum number of Tweets to be pulled.
+    verbose : int or bool, default=False
+        Controls the verbosity when pulling data.
+
+
+    Returns
+    -------
+    None : NoneType
     """
 
     logger = logging.getLogger(__name__)
@@ -97,7 +124,33 @@ def count_tweets(
     to check the effectiveness of your filters without exhausting the
     API's capacity.
 
-    TODO: Params documentation
+    Parameters
+    ----------
+    query : str
+        Query passed to the Twitter API to fecth Tweets.
+    from_date : str or None
+        Date format as specified by `convert_utc_time` for the starting time
+        of your search.
+    to_date : str or None
+        Date format as specified by `convert_utc_time` for the end time of
+        your search.
+    credentials_path : str
+        Path for the yaml file with the Twitter API credentials.
+    yaml_key : str
+        Key within the yaml file containing the Twitter API credentials to be
+        used.
+    count_bucket : str or None, default="day"
+        If using the counts api endpoint, will define the count bucket for
+        which tweets are aggregated.
+    results_per_call : int, default=500
+        Number of Tweets returned per call.
+    verbose : int or bool, default=False
+        Controls the verbosity when pulling the tweet count.
+
+    Returns
+    -------
+    counts : dict
+        Number of existing tweets for each bucket.
     """
 
     logger = logging.getLogger(__name__)

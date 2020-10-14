@@ -5,7 +5,7 @@ from sklearn.preprocessing import MinMaxScaler
 from matplotlib import cm, colors
 
 import dash
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_html_components as html
 
@@ -28,6 +28,34 @@ def viz_preprocess_data(
 ):
     """
     Prepares data to be fed into the dashboard.
+
+    Parameters
+    ----------
+    edges_path : str
+        Path for CSV file with the edges to input to the network.
+    nodes_path : str
+        Path for CSV file with nodes' data to input to the network.
+    dist_feature : str, default='weighted_dist'
+        Feature name containing the edge weights.
+    sample_n_edges : int, default=100
+        Number of edges to include into the network.
+    node_size : int, default=20
+        Default node size.
+    scale_multiplier : int, default=20
+        Adjust the distance between nodes.
+    weight_multiplier : int, default=10
+        Adjusts edges' thickness.
+    tweet_count_clip_value : int, default=10
+        Value to clip the number of tweets per user.
+    followers_clip_value : int, default=50000
+        Value to clip the number of followers per user.
+
+    Returns
+    -------
+    cy_nodes : dict
+        Dictionary with node data to feed into the dashboard.
+    cy_edges : dict
+        Dictionary with edge data to feed into the dashboard.
     """
 
     # Load data
@@ -148,9 +176,26 @@ def viz_preprocess_data(
 
 def make_dashboard_app(cy_nodes, cy_edges, node_size=20, scale_multiplier=20):
     """
-    Sets up the Dash object
+    Sets up the Dash object.
+
+    Parameters
+    ----------
+    cy_nodes : dict
+        Dictionary with node data to feed into the dashboard.
+    cy_edges : dict
+        Dictionary with edge data to feed into the dashboard.
+    node_size : int, default=20
+        Default node size.
+    scale_multiplier : int, default=20
+        Adjust the distance between nodes.
+
+    Returns
+    -------
+    app : dash.Dash object
+        Dashboard to be displayed by running the command
+        ``app.run_server(debug=True)``.
     """
-    
+
     # import the css template, and pass the css template into dash
     external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
     app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
