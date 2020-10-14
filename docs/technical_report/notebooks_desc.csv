@@ -1,0 +1,23 @@
+Notebook,Description
+1.0-jf-fetching-tweets-example,"Contains a simple demonstration on how to fetch tweets using a Twitter Sanbox Environment. The sample data is saved in the form of a json file, which must then be preprocessed."
+1.1-jf-data-pull-testing,Applies and tests the data pulling functions in the src directory.
+1.2-jf-data-etl-example,"Basic data extraction, transformation, exploring and highlighting the important information about tweet and user object metadata."
+1.3-jr-data-etl-load-ES,"Exploring and transforming the contents in the raw data, and loading into the Elasticsearch database for further preprocessing."
+1.4-jf-data-etl-testing,"Implements the functions developed for Twitter data ETL. See notebooks 1.2 and 1.3, as well as documentation to understand the steps developed/implemented in these functions."
+1.5-km-tweet-preprocessing,Runs the preprocessing pipeline on on the sample data extracted during the data pull and etl steps.
+1.5-jr-tweet-preprocessing-full-data,Runs the preprocessing pipeline and VADER sentiment model on the entire set of transformed tweets stored in the ES database.
+1.6-jr-tweet-preprocessing-extension,Loading the preprocessed data into the ES database using function in the src directory.
+2.0-msc-basic-EDA,Performs an initial EDA based on the sample data extracted during the data pull and etl steps.
+2.1-jf-EDA,Performs a detailed EDA based on the entire set of transformed tweets.
+3.0-jf-User2Vec,"Generates user vectors based on average doc2vec representations for each user. Implementation based on `Hallacet al, 2019 <http://ieeexplore.ieee.org/document/8875952>`_."
+3.0-jf-network-analysis,Builds a user network based on the number of retweets and/or replies among users.
+3.0-jr-tweets2vec,Generates 200-dimensional tweet vectors based on doc2vec implementation for the unique tweets/replies.
+3.0-msc-pov-analysis,Explores the results of Point-of-View analysis of unique tweets and replies.
+3.0-km-topic-modelling-lda,Implements topic modelling with LDA and PyLDAvis visualization over the unique tweets/replies.
+3.1-km-topic-modelling-biterm,Implements Biterm Topic Model over the unique tweets/replies.
+3.1-km-topic-modelling-nmf,Implements NMF topic modelling with wordclouds to visualize the topics.
+3.2-km-user-topic-analysis,Explores user-topic relationship with topics generated from LDA and NMF methods implemented in notebooks 3.0 and 3.1. Analysing top N topics for top N users based on an aggregated popularity metric.
+4.0-km-zstc,"Runs Zero-Shot Text Classification model on the translated version of unique tweets/replies, based on the transformers (pipeline) package. The model is using Bart with a classification head trained on MNLI."
+4.0-jf-zstc,Implementing an alternative Active Learning approach for generating topics.
+4.1-km-user-zstc-analysis,Explores user-topic relationship with topics generated from zero-shot text classification model implemented in notebook 4.0. Extracting top N topics and visualizing topic distribution for all users based on an aggregated popularity metric.
+5.0-research-question-1,A complete end-to-end analysis addressing the research question - *Identifying negative experiences and unmet needs*. Includes functions to generate wordclouds and K-length first-person based extractive summaries to highlight the unmet needs for each topic.
