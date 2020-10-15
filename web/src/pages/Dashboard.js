@@ -20,9 +20,9 @@ import {
   Search
 } from '@material-ui/icons';
 import ReactWordcloud from "react-wordcloud";
-import ResponsiveNetwork  from '../nivo/packages/network/src/ResponsiveNetwork'
 import ResponsiveBar from '../nivo/packages/bar/src/ResponsiveBar'
 import ResponsivePie from '../nivo/packages/pie/src/ResponsivePie'
+import ResponsiveLine from '../nivo/packages/line/src/ResponsiveLine'
 
 import DateFilters from '../components/dateFilters'
 import {handleSelect,onTextChange } from '../helpers/helpers'
@@ -62,28 +62,28 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const formater = new Intl.NumberFormat('en-IN')
+const formater = new Intl.NumberFormat()
 
 function Dashboard() {
 
   const classes = useStyles();
   const [rows, setRows] = useState([])
   const codeAreaRef = useRef(null);
-  const [nodes, setNodes] = useState([])
-  const [links, setLinks] = useState([])
+
   const [charts, setCharts] = useState({
-    wordCloud:[],
     langPie:[],
     povPie:[],
     topicsBar:[],
+    topicLine:[],
     avgSent:0,
     uniqueUsers:0,
     rewtweetCount:0,
     tweetCount:0,
-  })  
+  })
+  const [wordCloud, setWordCloud] = useState([])
   const [startDate, changeStartDate] = useState(null);
   const [endDate, changeEndDate] = useState(null);
-  const [textBox, setTextBox] = useState({})
+  const [textBox, setTextBox] = useState({search:''})
   const [selects,setSelect] = useState({
       topics:[],
       pov:[],
@@ -100,11 +100,13 @@ function Dashboard() {
       setVerified(event.target.checked);
   };
 
-  const loadNetwork = () => {
+  
+
+  const loadWordCloud = () => {
 
     axios({
         method:'post',
-        url:`${process.env.REACT_APP_API_URL}/api/network`,
+        url:`${process.env.REACT_APP_API_URL}/api/wordcloud`,
         data:{
             startDate:startDate,
             endDate:endDate,
@@ -117,15 +119,23 @@ function Dashboard() {
             sentEnd:sentiment[1],
         }
     }).then(response => {
-      setNodes(response.data.nodes)
-      setLinks(response.data.links)
+      setWordCloud(response.data.wordCloud)
     }).catch(error => {
         console.log('error',error)
     })
   }
 
   const loadData = () => {
-
+    setCharts({
+      langPie:[],
+      povPie:[],
+      topicsBar:[],
+      topicLine:[],
+      avgSent:0,
+      uniqueUsers:0,
+      rewtweetCount:0,
+      tweetCount:0,
+    })
     axios({
         method:'post',
         url:`${process.env.REACT_APP_API_URL}/api/dashboard`,
@@ -141,12 +151,11 @@ function Dashboard() {
             sentEnd:sentiment[1],
         }
     }).then(response => {
-      console.log(response)
       setCharts({
-        wordCloud:response.data.wordCloud,
         langPie:response.data.langPie,
         povPie:response.data.povPie,
         topicsBar:response.data.topicsBar,
+        topicLine:response.data.topicLine,
         avgSent:response.data.avgSent,
         uniqueUsers:response.data.uniqueUsers,
         rewtweetCount:response.data.rewtweetCount,
@@ -158,8 +167,8 @@ function Dashboard() {
   }
 
   useEffect(() => {
-      loadData(true)
-      loadNetwork()
+      loadData()
+      loadWordCloud()
   }, [startDate,endDate,selects,sentiment,verified]);
 
   return (
@@ -176,14 +185,18 @@ function Dashboard() {
                             onChange={(event) => onTextChange(event,'search',setTextBox) }
                             onKeyPress={(ev) => {
                                 if (ev.key === 'Enter') {
-                                    loadData(true)
+                                    loadData()
+                                    loadWordCloud()
                                     ev.preventDefault();
                                 }
                             }}
                             InputProps={{
                                 endAdornment: (
                                 <InputAdornment>
-                                    <IconButton onClick={() => loadData(true)}>
+                                    <IconButton onClick={() => {
+                                      loadData() 
+                                      loadWordCloud()
+                                    }}>
                                         <Search />
                                     </IconButton>
                                 </InputAdornment>
@@ -199,7 +212,7 @@ function Dashboard() {
                         setRows={setRows}
                     />
                     <Grid item lg={1} xs={4}>
-                        <FormControl row style={{marginTop:'25px'}}>
+                        <FormControl style={{marginTop:'25px'}}>
                             <FormControlLabel
                                 control={<Switch checked={verified} onChange={handleChangeVer} name="verified" color="primary"/>}
                                 label="Verified"
@@ -329,31 +342,93 @@ function Dashboard() {
       <Grid item xs={12}>
         <Card>
           <CardContent style={{height:500}}>
-            <ResponsiveNetwork
-              nodes={nodes}
-              links={links}
-              margin={{ top: 100, right: 0, bottom: 10, left: 0 }}
-              repulsivity={6}
-              iterations={60}
-              nodeColor={function(t){return t.color}}
-              nodeBorderWidth={1}
-              nodeBorderColor={{ from: 'color', modifiers: [ [ 'darker', 0.8 ] ] }}
-              linkThickness={function(t){return 2*(2-t.source.depth)}}
-              motionStiffness={160}
-              motionDamping={12}
-              tooltip={node => {
+            <ResponsiveLine
+              data={charts.topicLine}
+              motionStiffness={90}
+              motionDamping={15}
+              margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+              xScale={{ type: 'point' }}
+              axisTop={null}
+              axisRight={null}
+              axisBottom={{
+                  orient: 'bottom',
+                  tickSize: 5,
+                  tickPadding: 5,
+                  tickRotation: 0,
+                  legend: 'Date',
+                  legendOffset: 36,
+                  legendPosition: 'middle'
+              }}
+              axisLeft={{
+                  orient: 'left',
+                  tickSize: 5,
+                  tickPadding: 5,
+                  tickRotation: 0,
+                  legend: 'count',
+                  legendOffset: -40,
+                  legendPosition: 'middle'
+              }}
+              colors={{ scheme: 'nivo' }}
+              pointSize={10}
+              pointColor={{ theme: 'background' }}
+              pointBorderWidth={2}
+              pointBorderColor={{ from: 'serieColor' }}
+              pointLabel="y"
+              pointLabelYOffset={-12}
+              useMesh={true}
+              enableSlices="x"
+              yScale={{
+                  type: 'linear',
+                  stacked: true,
+              }}
+              sliceTooltip={({ slice }) => {
                 return (
-                    <div>
-                        <div>
-                            <strong style={{ color: node.color }}>ID: {node.id}</strong>
-                            <br />
-                            Name: {node.name}
-                            <br />
-                            Radius: {node.radius}
-                        </div>
+                    <div
+                        style={{
+                            background: 'white',
+                            padding: '9px 12px',
+                            border: '1px solid #ccc',
+                        }}
+                    >
+                        {slice.points.map(point => (
+                            <div
+                                key={point.id}
+                                style={{
+                                    padding: '3px 0',
+                                }}
+                            >
+                                <strong>{point.serieId}</strong> [{formater.format(point.data.yFormatted)}]
+                            </div>
+                        ))}
                     </div>
                 )
               }}
+              legends={[
+                  {
+                      anchor: 'bottom-right',
+                      direction: 'column',
+                      justify: false,
+                      translateX: 100,
+                      translateY: 0,
+                      itemsSpacing: 0,
+                      itemDirection: 'left-to-right',
+                      itemWidth: 80,
+                      itemHeight: 20,
+                      itemOpacity: 0.75,
+                      symbolSize: 12,
+                      symbolShape: 'circle',
+                      symbolBorderColor: 'rgba(0, 0, 0, .5)',
+                      effects: [
+                          {
+                              on: 'hover',
+                              style: {
+                                  itemBackground: 'rgba(0, 0, 0, .03)',
+                                  itemOpacity: 1
+                              }
+                          }
+                      ]
+                  }
+              ]}
             />
           </CardContent>
         </Card>
@@ -362,7 +437,7 @@ function Dashboard() {
         <Card>
             <CardContent style={{height:'500px'}}>
                 <ReactWordcloud 
-                  words={charts.wordCloud}
+                  words={wordCloud}
                   options={{fontSizes:[10,80]}}
                 />
             </CardContent>

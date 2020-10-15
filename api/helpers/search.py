@@ -10,9 +10,13 @@ def createTableRows(filters):
     query = createQueryFilters(filters)
 
     body={
-        'query':query,   
+        'query':query
     }
-
+    if filters['sort'] !='id':
+        body['sort'] = [
+            {filters['sort']:{"order":filters["direction"]}},
+            "_score"
+        ]
     body['size'] = filters['size']*2
     body['from'] = filters['from']
 
@@ -47,7 +51,6 @@ def createTableRows(filters):
             }
         }
         
-    pprint(body)
     sys.stdout.flush()
     rows = es.search(index = 'twitter',body=body)
 

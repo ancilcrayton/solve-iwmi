@@ -10,6 +10,7 @@ awscli
 flake8
 flask
 flask-cors
+flask-login
 python-dotenv>=0.5.1
 elasticsearch
 pandas

@@ -9,7 +9,7 @@
 import React, { memo, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { useTooltip } from '@nivo/tooltip'
-import { Mesh as BaseMesh } from '@nivo/voronoi'
+import { Mesh as BaseMesh } from '../../voronoi/src'
 
 const Mesh = ({
     points,

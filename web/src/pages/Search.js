@@ -17,6 +17,7 @@ import {
     TableFooter,
     Paper,
     IconButton,
+    Icon,
     InputAdornment,
     Select,
     Switch,
@@ -28,7 +29,9 @@ import {
 } from '@material-ui/core';
 import {
     ExpandMore,
-    Search
+    Search,
+    ArrowUpward,
+    ArrowDownward
 } from '@material-ui/icons';
 
 import clsx from 'clsx';
@@ -60,6 +63,9 @@ const useStyles = makeStyles(theme => ({
           width:'100%',
           marginTop:'16px',
           marginBottom:'8px'
+      },
+      noselect:{
+        userSelect: "none"
       }
 }));
 
@@ -79,12 +85,38 @@ function SearchPage() {
         pov:[],
         lang:[]
     })
+
+    const [sort,setSort] = useState({'name':'id','direction':'asc'})
     const [verified, setVerified] = React.useState(false);
     const [sentiment, setSentiment] = React.useState([-1, 1]);
 
     const handleChangeSent = (event, newValue) => {
         setSentiment(newValue);
     };
+
+    const handleSortClick = (value) => {
+
+        if(sort.name === value){
+            if(sort.direction === 'asc'){
+                setSort({
+                    name:value,
+                    direction:'desc'
+                })
+            }
+            else{
+                setSort({
+                    name:value,
+                    direction:'asc'
+                })
+            }
+        }
+        else{
+            setSort({
+                name:value,
+                direction:'desc'
+            })
+        }
+    }
 
     const handleChangeVer = (event) => {
         setVerified(event.target.checked);
@@ -100,6 +132,7 @@ function SearchPage() {
         axios({
             method:'post',
             url:`${process.env.REACT_APP_API_URL}/api/search`,
+            withCredentials:true,
             data:{
                 startDate:startDate,
                 endDate:endDate,
@@ -111,7 +144,9 @@ function SearchPage() {
                 sentStart:sentiment[0],
                 sentEnd:sentiment[1],
                 size:rowsPerPage,
-                from:from
+                from:from,
+                sort:sort.name,
+                direction:sort.direction
             }
         }).then(response => {
             var newRows;
@@ -135,7 +170,7 @@ function SearchPage() {
 
     useEffect(() => {
         loadData(true)
-    }, [startDate,endDate,selects,sentiment,verified]);
+    }, [startDate,endDate,selects,sentiment,verified,sort]);
 
     useEffect(()=>{
         if(page !== 0 && (rowsPerPage*page+rowsPerPage*2) > rows.length){
@@ -205,7 +240,7 @@ function SearchPage() {
                                     setRows={setRows}
                                 />
                                 <Grid item lg={1} xs={4}>
-                                    <FormControl row style={{marginTop:'25px'}}>
+                                    <FormControl style={{marginTop:'25px'}}>
                                         <FormControlLabel
                                             control={<Switch checked={verified} onChange={handleChangeVer} name="verified" color="primary"/>}
                                             label="Verified"
@@ -310,14 +345,98 @@ function SearchPage() {
                         <Table className={classes.table} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Tweet ID</TableCell>
-                                    <TableCell>Sentiment</TableCell>
-                                    <TableCell>POV</TableCell>
-                                    <TableCell align="left">Retweets</TableCell>
-                                    <TableCell align="left">Favorites</TableCell>
-                                    <TableCell align="left">Replies</TableCell>
-                                    <TableCell align="left">Followers</TableCell>
-                                    <TableCell align="left">Date Added</TableCell>
+                                    <TableCell onClick={() => handleSortClick('id')}>Tweet ID</TableCell>
+                                    <TableCell className={classes.noselect} onClick={() => handleSortClick('sentiment')}> 
+                                        Sentiment
+                                        {sort.name === 'sentiment' ? 
+                                            sort.direction === 'asc' ? 
+                                            <Icon>
+                                                <ArrowUpward />
+                                            </Icon> :
+                                            <Icon>
+                                                <ArrowDownward />
+                                            </Icon>
+                                            : ''
+                                        }
+                                    </TableCell>
+                                    <TableCell className={classes.noselect} onClick={() => handleSortClick('pov.keyword')}> 
+                                        POV
+                                        {sort.name === 'pov.keyword' ? 
+                                            sort.direction === 'asc' ? 
+                                            <Icon>
+                                                <ArrowUpward />
+                                            </Icon> :
+                                            <Icon>
+                                                <ArrowDownward />
+                                            </Icon>
+                                            : ''
+                                        }
+                                    </TableCell>
+                                    <TableCell className={classes.noselect} onClick={() => handleSortClick('retweet_count')} align="left"> 
+                                        Retweets
+                                        {sort.name === 'retweet_count' ? 
+                                            sort.direction === 'asc' ? 
+                                            <Icon>
+                                                <ArrowUpward />
+                                            </Icon> :
+                                            <Icon>
+                                                <ArrowDownward />
+                                            </Icon>
+                                            : ''
+                                        }
+                                    </TableCell>
+                                    <TableCell className={classes.noselect} onClick={() => handleSortClick('favorite_count')} align="left"> 
+                                        Favorites
+                                        {sort.name === 'favorite_count' ? 
+                                            sort.direction === 'asc' ? 
+                                            <Icon>
+                                                <ArrowUpward />
+                                            </Icon> :
+                                            <Icon>
+                                                <ArrowDownward />
+                                            </Icon>
+                                            : ''
+                                        }
+                                    </TableCell>
+                                    <TableCell className={classes.noselect} onClick={() => handleSortClick('reply_count')} align="left">
+                                        Replies
+                                        {sort.name === 'reply_count' ? 
+                                            sort.direction === 'asc' ? 
+                                            <Icon>
+                                                <ArrowUpward />
+                                            </Icon> :
+                                            <Icon>
+                                                <ArrowDownward />
+                                            </Icon>
+                                            : ''
+                                        }
+                                    </TableCell>
+                                    <TableCell className={classes.noselect} onClick={() => handleSortClick('followers_count')} align="left">
+                                        Followers
+                                        {sort.name === 'followers_count' ? 
+                                            sort.direction === 'asc' ? 
+                                            <Icon>
+                                                <ArrowUpward />
+                                            </Icon> :
+                                            <Icon>
+                                                <ArrowDownward />
+                                            </Icon>
+                                            : ''
+                                        }
+                                    </TableCell>
+                                    <TableCell className={classes.noselect} onClick={() => handleSortClick('tweet_created_at')} align="left">
+                                        Date Added
+                                        {sort.name === 'tweet_created_at' ? 
+                                            sort.direction === 'asc' ? 
+                                            <Icon>
+                                                <ArrowUpward />
+                                            </Icon> :
+                                            <Icon>
+                                                <ArrowDownward />
+                                            </Icon>
+                                            : ''
+                                        }
+                                    </TableCell>
                                     <TableCell></TableCell>
                                 </TableRow>
                             </TableHead>
@@ -326,7 +445,7 @@ function SearchPage() {
                                     <Fragment key={"row_"+i}>
                                         <TableRow key={"row_"+i}>
                                             <TableCell component="th" scope="left">{row._id}</TableCell>
-                                            <TableCell align="left">{row._source['sentiment'].toFixed(2)}</TableCell>
+                                            <TableCell  align="left">{row._source['sentiment'].toFixed(2)}</TableCell>
                                             <TableCell align="left">{row._source['pov'] ? row._source['pov'] :'None'}</TableCell>
                                             <TableCell align="left">{row._source['retweet_count']}</TableCell>
                                             <TableCell align="left">{row._source['favorite_count']}</TableCell>
