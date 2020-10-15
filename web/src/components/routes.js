@@ -8,13 +8,15 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-
+import {Grid} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Dashboard from '../pages/Dashboard'
 import SearchPage from '../pages/Search'
 import Network from '../pages/Network'
 import Login from '../pages/Login'
+import iwmiLogo from '../assets/iwmi-logo.png'; 
+import dssgLogo from '../assets/dssglogo.png'; 
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -33,6 +35,10 @@ const useStyles = makeStyles(theme => ({
     },
     active:{
         backgroundColor: 'rgba(255, 255, 255, 0.12)',
+    },
+    image:{
+        width:'40px',
+        height:'40px'
     }
   }));
 
@@ -60,28 +66,51 @@ function Routes() {
         <Router>
             <AppBar position="static">
                 <Toolbar>
-                    
-                        <Typography variant="h5" className={classes.title}>
-                            <NavLink className={classes.titleLink} to={"/"}>
-                                IWMI
-                            </NavLink>
-                        </Typography>
-                    
-                    {/* <Button to={"/"} exact className={classes.menuButton} activeClassName={classes.active} color="primary" component={NavLink} >
-                        Home
-                    </Button> */}
-                    <Button to={"/login"} exact className={classes.menuButton} activeClassName={classes.active}  color="primary" component={NavLink} >
-                        Login
-                    </Button>
-                    <Button to={"/"} exact className={classes.menuButton} activeClassName={classes.active}  color="primary" component={NavLink} >
-                        Dashboard
-                    </Button>
-                    {isAuthenticated ? <Button to={"/search"} className={classes.menuButton} activeClassName={classes.active}  color="primary" component={NavLink} >
-                        Search
-                    </Button>: ''} 
-                    {isAuthenticated ? <Button to={"/network"} className={classes.menuButton} activeClassName={classes.active}  color="primary" component={NavLink} >
-                    Network
-                    </Button>: ''} 
+                    <Grid
+                        justify="space-between" // Add it here :)
+                        container 
+                        spacing={3}
+                    >
+                        <Grid item xs={1}>
+                            <Typography variant="h5" className={classes.title}>
+                                <NavLink className={classes.titleLink} to={"/"}>
+                                    IWMI
+                                </NavLink>
+                            </Typography>
+                        </Grid>
+                        {/* <Button to={"/"} exact className={classes.menuButton} activeClassName={classes.active} color="primary" component={NavLink} >
+                            Home
+                        </Button> */}
+                        <Grid item xs={1}>
+                            <Button to={"/login"} exact className={classes.menuButton} activeClassName={classes.active}  color="primary" component={NavLink} >
+                                Login
+                            </Button>
+                        </Grid>
+                        <Grid item xs={1}>
+                            <Button to={"/"} exact className={classes.menuButton} activeClassName={classes.active}  color="primary" component={NavLink} >
+                                Dashboard
+                            </Button>
+                        </Grid>
+                        <Grid item xs={1}>
+                            {isAuthenticated ? <Button to={"/search"} className={classes.menuButton} activeClassName={classes.active}  color="primary" component={NavLink} >
+                                Search
+                            </Button>: ''} 
+                        </Grid>
+                        <Grid item xs={1}>
+                            {isAuthenticated ? <Button to={"/network"} className={classes.menuButton} activeClassName={classes.active}  color="primary" component={NavLink} >
+                            Network
+                            </Button>: ''} 
+                        </Grid>
+                        <Grid item xs={5}>
+
+                        </Grid>
+                        <Grid item xs={1}>
+                            <img className={classes.image} src={iwmiLogo} />
+                        </Grid>
+                        <Grid item xs={1}>
+                            <img className={classes.image} src={dssgLogo} />
+                        </Grid>
+                    </Grid>
                 </Toolbar>
             </AppBar>
             <Switch>
