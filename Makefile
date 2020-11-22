@@ -37,6 +37,10 @@ etl:
 load_es:
 	$(PYTHON_INTERPRETER) src/data/make_load_es.py configs.yaml load_es
 
+## Updates or creatres pov network translations and topics into es
+update_es:
+	$(PYTHON_INTERPRETER) src/data/make_update_es.py configs.yaml update_es
+
 ## Create Docker Network 
 create_network:
 	docker network create iwmi-net

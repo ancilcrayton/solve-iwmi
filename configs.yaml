@@ -44,3 +44,8 @@ load_es:
     input_path: *processed_data 
     ip_address: *es_ip
     verbose: *verbose
+
+update_es:
+    ip_address: *es_ip
+    input_path: *processed_data 
+    verbose: *verbose

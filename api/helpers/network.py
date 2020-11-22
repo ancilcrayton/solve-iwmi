@@ -3,12 +3,21 @@ import sys
 from database import es
 
 def createNetwork(userID):
+"""
+Creates the nodes and links from the users database
+
+Args:
+    userid of center node
+"""
+    #gets the user of the center
     res = es.get(index="users", id=userID)
     ids = []
     links = []
     results = res['_source']['edges']
+    #limit the amount of nodes otherwise this can crash user browsers
     if len(results) > 300:
         results = results[0:300]
+    #go through all the 1st level nodes and create links while keeping track of users seen
     for edge in results:
         ids.append(edge["target"])
         links.append({
@@ -24,7 +33,7 @@ def createNetwork(userID):
         "depth": 0,
         "color": "rgb(244, 117, 96)"
     }]
-
+    #query the database now for information on all level 1 nodes
     body = {
         'query':{
             'ids':{
@@ -38,7 +47,7 @@ def createNetwork(userID):
     res = es.search(index='users',body=body)
     
     edges = []
-
+    #go through and add data for all level 1 nodes
     for user in res['hits']['hits']:
         if int(user['_id']) not in nodeIDs:
             nodes.append({
@@ -50,7 +59,7 @@ def createNetwork(userID):
             })
             nodeIDs.append(int(user['_id']))
         edges = edges + user['_source']['edges']
-
+    #go through now and for each level 2 node create the nodes and the links if its not already added
     for edge in edges:
         if edge['target'] not in nodeIDs:
             nodes.append({

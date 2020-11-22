@@ -95,6 +95,9 @@ All `make` scripts/commands can be configured through the `configs.yaml` file. T
     # Load preprocessed data into ES
     make load_es
 
+    #Update the data in es and create networks index for ES
+    make update_es
+
     # Close the database
     make close_database
 
@@ -118,6 +121,21 @@ If your raw data file is too large to be loaded at once into Elastic Search, you
     jq -c . < data_pull_sample.json | split -l 10000 - chunked_data/small_
     # check how many tweets are there
     wc -l chunked_data/* | grep total
+
+
+### Website
+
+Once all data is created you can then bring up the website.  In the web folder make sure that you add an env file 
+
+Env file should be called .env and look like
+
+    REACT_APP_API_URL=(website ip or dns)
+
+Once the env is setup all you have to do if the database is setup correctly just bring the dockers up with the command
+
+    docker-compose up
+
+Frontend port is set to 3000 and backend to 8080
 
 
 --------
