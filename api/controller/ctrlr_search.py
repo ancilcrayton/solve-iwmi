@@ -16,6 +16,13 @@ searchbp = Blueprint('searchbp', __name__)
 @searchbp.route("/api/search", methods=['POST'])
 @login_required
 def search():
+""" 
+Takes in filters and returns Elasticsearch Query filtered and sorted
+
+POST Body
+    check helpers/filters for all the filters used in the code 
+
+"""
     print(request.json)
     sys.stdout.flush()
 
@@ -25,6 +32,23 @@ def search():
 
 @searchbp.route("/api/dashboard", methods=['POST'])
 def dashboard():
+""" 
+Takes in filters and returns data for visualizations
+
+POST Body
+    check helpers/filters for all the filters used in the code 
+
+Yields
+    langPie - Format of data for langauge pie chart
+    povPie - Format of data for point of views pie chart
+    topicsBar - Bar chart of top topics
+    topics - Creates a line chart of the topics for each day
+
+    avgSent - Card for average sentiment
+    uniqueUsers - Number of unique users
+    tweetCount - Total tweet count
+    rewtweetCount - Total rewtweets
+"""
     print(request.json)
     sys.stdout.flush()
 
@@ -71,7 +95,7 @@ def dashboard():
                     "dates": {
                         "histogram": {
                             "field": "tweet_created_at",
-                            "interval":86400000 #this is a day #259200000 #this is 3 days # this is a week604800000
+                            "interval":86400000 #this is a day #259200000 #this is 3 days # this is a week #604800000
                         }
                     }
                 }
@@ -114,6 +138,15 @@ def dashboard():
 
 @searchbp.route("/api/wordcloud", methods=['POST'])
 def wordCloud():
+""" 
+Takes in filters and returns data for visualization of the world cloud 
+
+POST Body
+    check helpers/filters for all the filters used in the code 
+
+Yields
+    wordCloud - Data in format for the wordcloud
+""""
     print(request.json)
     sys.stdout.flush()
 
@@ -147,7 +180,13 @@ def wordCloud():
 @searchbp.route("/api/network", methods=['POST'])
 @login_required
 def network():
+""" 
+Creates a network right now for Modi TODO add a user input of users 
 
+Yields
+    nodes
+    links
+""""
     nodes,links = createNetwork(18839785)
     # nodes,links = createNetwork(891304186415022080)
 

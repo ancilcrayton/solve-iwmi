@@ -6,14 +6,12 @@ from os.path import join
 from elasticsearch import Elasticsearch, helpers
 
 
-project_dir = join(os.getcwd(), os.pardir,os.pardir)
-process_dir = join(project_dir, 'data', 'processed')
 
-def update_es(
+def update_es_database(
     df,
     idCol,
     transform,
-    ip_address='localhost',
+    ip_address,
 ):
     """
     Loads the dataframe into the database
@@ -40,7 +38,7 @@ def update_es(
             body = body
         )
 
-def ingest_topics():
+def ingest_topics(ip_address,process_dir):
     def transform_ingest(row):
         dic = row.to_dict()
         del dic['tweet_id']
@@ -52,13 +50,14 @@ def ingest_topics():
 
 
     df = pd.read_csv(join(process_dir,'zstc_model_final.csv'))
-    update_es(
+    update_es_database(
         df,
         'tweet_id',
-        transform_ingest
+        transform_ingest,
+        ip_address
     )
 
-def ingest_translations():
+def ingest_translations(ip_address,process_dir):
     def transform_trans(row):
 
         return {
@@ -66,13 +65,14 @@ def ingest_translations():
         }
 
     df = pd.read_csv(join(process_dir,'translated_tweets.csv')) 
-    update_es(
+    update_es_database(
         df,
         'index',
-        transform_trans
+        transform_trans,
+        ip_address
     )
 
-def ingest_pov():
+def ingest_pov(ip_address,process_dir):
     def transform_pov(row):
 
         return {
@@ -80,14 +80,15 @@ def ingest_pov():
         }
 
     df = pd.read_csv(join(process_dir,'pov_final.csv'))
-    update_es(
+    update_es_database(
         df,
         'id',
-        transform_pov
+        transform_pov,
+        ip_address
     )
 
-def ingest_network():
-    es = Elasticsearch()
+def ingest_network(ip_address,process_dir):
+    es = Elasticsearch([ip_address])
     nodeDF = pd.read_csv(join(process_dir,'nodes_users.csv'))
     nodeDF = nodeDF.fillna(0)
 
@@ -133,6 +134,13 @@ def ingest_network():
     )
     print(errors)
 
-if __name__ == '__main__':
+def update_es(process_dir,ip_address='localhost'):
+    ingest_pov(ip_address,process_dir)
+    ingest_network(ip_address,process_dir)
+    ingest_translations(ip_address,process_dir)
+    ingest_topics(ip_address,process_dir)
 
-    ingest_pov()
+if __name__ == '__main__':
+    project_dir = join(os.getcwd(), os.pardir,os.pardir)
+    process_dir = join(project_dir, 'data', 'processed')
+    update_es(process_dir)

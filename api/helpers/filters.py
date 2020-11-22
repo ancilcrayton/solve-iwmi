@@ -1,6 +1,22 @@
 from dateutil import parser
 
 def createQueryFilters(filters):
+"""
+Takes in filters from the frontend and creates a query that elasticsearch can use
+
+Args: filters with the fields below
+    verified - if the user is verified
+    topics - list of topics we want to see
+    pov - point of view
+    lang - the langauge the tweet was originally in
+    endDate
+    startDate
+    sentStart - lower of sentiment
+    sentEnd - upper of sentiment
+    search - does an elasticsearch from the full_text_trans field in the database
+Yeilds:
+    An array of filters to be used in the bool field of elasticsearch query
+"""
     query = []
 
     if 'verified' in filters and filters['verified']:
