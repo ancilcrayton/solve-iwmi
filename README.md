@@ -132,8 +132,10 @@ Env file should be called .env and look like
 
 Once the env is setup all you have to do if the database is setup correctly just bring the dockers up with the command
     docker-compose up
-    
+
 Frontend port is set to 3000 and backend to 8080
+
+
 --------
 
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
