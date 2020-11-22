@@ -83,6 +83,9 @@ set of commands should allow you to setup the project with minimal effort:
 
     # Load preprocessed data into ES
     make load_es
+    
+    #Update the data in es and create networks index for ES
+    make update_es
 
     # Close the database
     make close_database
@@ -91,3 +94,22 @@ Alternatively, if you only intend to use the API, you can just install the `src`
 
     pip install -U git+https://github.com/ancilcrayton/solve-iwmi.git
 
+
+Website
+-------
+
+Once all data is created you can then bring up the website.  In the web folder make sure that you add an env file 
+
+Env file should be called .env and look like
+
+.. code:: bash
+
+    REACT_APP_API_URL=(website ip or dns)
+
+Once the env is setup all you have to do if the database is setup correctly just bring the dockers up with the command
+
+.. code:: bash
+
+    docker-compose up
+
+Frontend port is set to 3000 and backend to 8080
