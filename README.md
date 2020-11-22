@@ -128,9 +128,11 @@ If your raw data file is too large to be loaded at once into Elastic Search, you
 Once all data is created you can then bring up the website.  In the web folder make sure that you add an env file 
 
 Env file should be called .env and look like
+
     REACT_APP_API_URL=(website ip or dns)
 
 Once the env is setup all you have to do if the database is setup correctly just bring the dockers up with the command
+
     docker-compose up
 
 Frontend port is set to 3000 and backend to 8080
