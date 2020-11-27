@@ -196,6 +196,8 @@ def make_dashboard_app(cy_nodes, cy_edges, node_size=20, scale_multiplier=20):
         ``app.run_server(debug=True)``.
     """
 
+    global app
+
     # import the css template, and pass the css template into dash
     external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
     app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
