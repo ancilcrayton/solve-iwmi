@@ -1,3 +1,6 @@
+# general dependencies
+-r requirements.txt
+
 # for documentation purposes
 Sphinx
 sphinx-material
