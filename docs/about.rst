@@ -21,7 +21,7 @@ Authors
 ----------------------------
 
 - Ancil Crayton
-- `João Fonseca <https://joaopfonseca.github.io>`_
+- João Fonseca 
 - Kanav Mehra
 - Jared Ross
 - Marcelo Sandoval-Castañeda
