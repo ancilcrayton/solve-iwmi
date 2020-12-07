@@ -36,14 +36,14 @@ def request_loader(request):
 
 @authbp.route("/api/login", methods=['POST'])
 def login():
-""" 
-Takes in email and password if correct logs in the user
+    """ 
+    Takes in email and password if correct logs in the user
 
-POST Body
-    email
-    password 
+    POST Body
+        email
+        password 
 
-"""
+    """
     email = request.json['email']
     if request.json['password'] == users[email]['password']:
         user = User()

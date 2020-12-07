@@ -6,17 +6,17 @@ from helpers.filters import createQueryFilters
 
 
 def createTableRows(filters):
-"""
-Takes in filters from the frontend and creates a query that elasticsearch can use
+    """
+    Takes in filters from the frontend and creates a query that elasticsearch can use
 
-Args: filters with the fields below (more used in helpers/filters.py)
-   sort - what field the table should be sorted on
-   order - if the sort is asc or desc
-   size - size of the elasticsearch query
-   from - what document in the db to start with. This is used when scrolling to add more documentsz to the search
-Yeilds:
-    An array of filters to be used in the bool field of elasticsearch query
-"""
+    Args: filters with the fields below (more used in helpers/filters.py)
+    sort - what field the table should be sorted on
+    order - if the sort is asc or desc
+    size - size of the elasticsearch query
+    from - what document in the db to start with. This is used when scrolling to add more documentsz to the search
+    Yeilds:
+        An array of filters to be used in the bool field of elasticsearch query
+    """
     query = createQueryFilters(filters)
 
     body={
