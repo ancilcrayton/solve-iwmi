@@ -3,12 +3,12 @@ import sys
 from database import es
 
 def createNetwork(userID):
-"""
-Creates the nodes and links from the users database
+    """
+    Creates the nodes and links from the users database
 
-Args:
-    userid of center node
-"""
+    Args:
+        userid of center node
+    """
     #gets the user of the center
     res = es.get(index="users", id=userID)
     ids = []
